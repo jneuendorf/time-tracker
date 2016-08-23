@@ -54,6 +54,16 @@ ProjectSchema = new SimpleSchema({
         autoform: {
             type: "hidden"
         }
+    },
+    createdAt: {
+        type: Date,
+        label: "Created At",
+        autoValue: function() {
+            return new Date()
+        },
+        autoform: {
+            type: "hidden"
+        }
     }
 });
 

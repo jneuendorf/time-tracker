@@ -1,3 +1,17 @@
 <template name="Project">
-    <h2>{{name}}</h2>
+    {{#with project}}
+        <div class="row">
+            <div class="col-xs-3">
+                <h1 class="nav">
+                    <a href="/">
+                        <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
+                        <span class="glyphicon glyphicon-list-alt hidden-xs"></span>
+                    </a>
+                </h1>
+            </div>
+            <div class="col-xs-6">
+                <h1 class="heading">{{name}}</h1>
+            </div>
+        </div>
+    {{/with}}
 </template>
