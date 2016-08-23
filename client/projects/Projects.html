@@ -1,0 +1,9 @@
+<template name="Projects">
+    <div class="tab-content">
+        {{#each projects}}
+            <div id="{{_id}}" role="tabpanel" class="tab-pane">
+                {{> Project}}
+            </div>
+        {{/each}}
+    </div>
+</template>
