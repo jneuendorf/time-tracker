@@ -1,5 +1,13 @@
 <template name="Project">
-    {{#with project}}
+    {{#unless Template.subscriptionsReady}}
+        <script type="text/javascript">
+            $("#AjaxLoader").fadeIn(0);
+        </script>
+    {{else}}
+        <script type="text/javascript">
+            $("#AjaxLoader").fadeOut(200);
+        </script>
+        {{#with project}}
         <div class="row">
             <div class="col-xs-3">
                 <h1 class="nav">
@@ -10,8 +18,76 @@
                 </h1>
             </div>
             <div class="col-xs-6">
-                <h1 class="heading">{{name}}</h1>
+                <h1 class="heading">
+                    {{name}}
+                </h1>
+            </div>
+            <div class="col-xs-3">
+                <h1 class="mod">
+                    <a href="/projects/{{_id}}/delete">
+                        <button type="button" class="btn btn-danger btn-lg deleteProject">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </a>
+                </h1>
             </div>
         </div>
-    {{/with}}
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="lead" id="clock"></div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" id="btn-reset">
+                    <span class="glyphicon glyphicon-repeat"></span> Reset countdown
+                </button>
+
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default" id="btn-pause">
+                        <input type="radio" name="options" autocomplete="off">
+                        <span class="glyphicon glyphicon-pause"></span> Pause
+                    </label>
+
+                    <label class="btn btn-default" id="btn-resume">
+                        <input type="radio" name="options" autocomplete="off">
+                        <span class="glyphicon glyphicon-play"></span> Start
+                    </label>
+                </div>
+
+                <button type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-ok-circle"></span> Save
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#AddEntriesModal">Add entries</button>
+            </div>
+            {{#if entries}}
+            <table>
+                <thead>
+
+                </thead>
+                <tbody>
+                    {{#each entries}} {{/each}}
+                </tbody>
+            </table>
+            {{else}}
+            <div class="row">
+                <div class="col-xs-12">
+                    no entries yet
+                </div>
+            </div>
+            {{/if}}
+            <div class="col-xs-12">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#AddEntriesModal">Add entries</button>
+            </div>
+        </div>
+        {{/with}}
+        {{> AddEntriesModal}}
+    {{/unless}}
 </template>

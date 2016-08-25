@@ -9,32 +9,18 @@ Projects = new Mongo.Collection('projects');
 //     }
 // });
 
-// Schemas = {
-//     TestSchema: new SimpleSchema({
-//         id: {
-//             type: Number
-//         },
-//         name: {
-//             type: String
-//         }
-//     })
-// };
-
 Entry = new SimpleSchema({
-    name: {
-        type: String
-    },
-    start: {
-        type: Date,
-        autoValue: function () {
-            return new Date();
+    duration: {
+        type: String,
+        autoform: {
+            afFieldInput: {
+                class: "duration"
+            }
         }
     },
-    end: {
-        type: Date,
-        autoValue: function () {
-            return new Date();
-        }
+    note: {
+        type: String,
+        optional: true
     }
 });
 
@@ -50,10 +36,7 @@ ProjectSchema = new SimpleSchema({
     entries: {
         type: [Entry],
         defaultValue: [],
-        optional: true,
-        autoform: {
-            type: "hidden"
-        }
+        optional: true
     },
     createdAt: {
         type: Date,
