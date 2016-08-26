@@ -12,17 +12,17 @@ Template.Project.onCreated(function() {
 //     let $clock = this.$("#clock");
 //     let initialized = false;
 //
-//     $("#btn-reset").click(function() {
+//     $("#clock-reset").click(function() {
 //         $clock.countdown(new Date());
 //         return true;
 //     });
 //
-//     $("#btn-pause").click(function() {
+//     $("#clock-pause").click(function() {
 //         $clock.countdown("pause");
 //         return true;
 //     });
 //
-//     $("#btn-resume").click(function() {
+//     $("#clock-resume").click(function() {
 //         if (!initialized) {
 //             $clock.countdown(new Date(), {elapse: true})
 //                 .on("update.countdown", function(event) {
@@ -57,24 +57,31 @@ Template.Project.helpers({
 });
 
 Template.Project.events({
-    "click #btn-resume": function(event, template) {
+    "click #clock-save": function(event, template) {
+        let val = template.$("#clock").val();
+    },
+    // stopwatch behavior
+    "click #clock-resume": function(event, template) {
         let clockValue = template.clockValue;
         let clock = template.$("#clock");
+        // setting disabled with jquery .prop does not work on label elements
+        template.$("#clock-pause").attr("disabled", null);
+        template.$("#clock-save").prop("disabled", false);
         template.clockInitValue = Date.now();
         template.clockTimer = setInterval(() => {
             let seconds = (Date.now() - template.clockInitValue) / 1000;
             template.currentValue = seconds;
-            clock.html(numeral(template.clockValue + seconds).format("00:00:00"));
+            clock.val(numeral(template.clockValue + seconds).format("00:00:00"));
         }, 1000);
     },
-    "click #btn-pause": function(event, template) {
+    "click #clock-pause": function(event, template) {
         template.clockValue += template.currentValue;
         clearInterval(template.clockTimer);
     },
-    "click #btn-reset": function(event, template) {
+    "click #clock-reset": function(event, template) {
         template.clockValue = 0;
         template.clockInitValue = Date.now();
-        template.$("#clock").html(initialTime());
+        template.$("#clock").val(initialTime());
         return true;
     }
 });

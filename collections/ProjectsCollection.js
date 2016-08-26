@@ -10,6 +10,14 @@ Projects = new Mongo.Collection('projects');
 // });
 
 Entry = new SimpleSchema({
+    date: {
+        type: String,
+        autoform: {
+            afFieldInput: {
+                class: "date"
+            }
+        }
+    },
     duration: {
         type: String,
         autoform: {
@@ -20,7 +28,12 @@ Entry = new SimpleSchema({
     },
     note: {
         type: String,
-        optional: true
+        optional: true,
+        autoform: {
+            afFieldInput: {
+                class: "note"
+            }
+        }
     }
 });
 
