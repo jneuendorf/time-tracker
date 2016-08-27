@@ -1,19 +1,15 @@
-// Meteor.subscribe("projects");
+// // Meteor.subscribe("projects");
 
-global.goHome = (params) => {
-    if (!params) {
-        location.href = "/";
+// TEMPLATE HELPERS (accessible in all templates)
+Template.registerHelper("firstOf", function() {
+    let i = 0;
+    let maxIndex = arguments.length - 1;
+    while (!arguments[i] && i < maxIndex) {
+        i++;
     }
-    else {
-        let parts = [];
-        for (var key in params) {
-            if (params.hasOwnProperty(key)) {
-                parts.push(key + "=" + params[key]);
-            }
-        }
-        // setTimeout(() => {
-        //     location.href = "/?" + parts.join("&");
-        // }, 4000);
-        location.href = "/?" + parts.join("&");
-    }
-}
+    return arguments[i];
+});
+Template.registerHelper("concat", function() {
+    // last argument is the spacebar keyword hash
+    return Array.prototype.slice.call(arguments, 0, -1).join("");
+});

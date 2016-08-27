@@ -9,15 +9,15 @@
                     <h4 class="modal-title">Add new entries</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- {{> quickForm collection="Projects" doc=project id="addEntriesForm" type="update" class="add-entries-form" omitFields="name,description"}} -->
-                    {{#autoForm id="addEntriesForm" type="update-pushArray" collection="Projects" doc=project scope="entries" resetOnSuccess="true"}}
+                    <!-- {{> quickForm collection="Projects" doc=project id="AddEntriesForm" type="update" class="add-entries-form" omitFields="name,description"}} -->
+                    {{#autoForm id="AddEntriesForm" type="update-pushArray" collection="Projects" doc=project scope="entries" resetOnSuccess="true" class=now}}
                         {{> afFormGroup name="date"}}
                         {{> afFormGroup name="duration"}}
                         {{> afFormGroup name="note"}}
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <!-- <button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button> -->
                         </div>
+                        {{> TemplateHooks onRenderedCallback="initDatetimepicker" container="#AddEntriesForm"}}
                     {{/autoForm}}
                 </div>
             </div>

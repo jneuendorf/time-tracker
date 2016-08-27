@@ -6,51 +6,31 @@ Template.Project.onCreated(function() {
     this.clockInitValue = null;
     this.currentValue = 0;
     this.clockValue = 0;
+    this.projectId = FlowRouter.getParam("id");
 });
-
-// Template.Project.onRendered(function() {
-//     let $clock = this.$("#clock");
-//     let initialized = false;
-//
-//     $("#clock-reset").click(function() {
-//         $clock.countdown(new Date());
-//         return true;
-//     });
-//
-//     $("#clock-pause").click(function() {
-//         $clock.countdown("pause");
-//         return true;
-//     });
-//
-//     $("#clock-resume").click(function() {
-//         if (!initialized) {
-//             $clock.countdown(new Date(), {elapse: true})
-//                 .on("update.countdown", function(event) {
-//                     $clock.html(event.strftime("%M:%S"));
-//                 });
-//         }
-//         $clock.countdown("resume");
-//         return true;
-//     });
-// });
 
 let initialTime = () => {
     return numeral(0).format("00:00:00");
 }
 
+let getCurrentProject = function() {
+    let id = FlowRouter.getParam("id");
+    let project = Projects.findOne({
+        // _id: id
+        _id: Template.instance().projectId
+    });
+    return project;
+};
+
 Template.Project.helpers({
     project: () => {
-        let id = FlowRouter.getParam("id");
+        // let id = FlowRouter.getParam("id");
         let project = Projects.findOne({
-            _id: id
+            _id: Template.instance().projectId
         });
         return project;
-        if (!project) {
-            global.goHome();
-        } else {
-            return project;
-        }
     },
+    // project: getCurrentProject,
     initialTime: () => {
         return initialTime();
     }
@@ -60,7 +40,7 @@ Template.Project.events({
     "click #clock-save": function(event, template) {
         let val = template.$("#clock").val();
     },
-    // stopwatch behavior
+    // STOPWATCH BEHAVIOR
     "click #clock-resume": function(event, template) {
         let clockValue = template.clockValue;
         let clock = template.$("#clock");
@@ -83,5 +63,38 @@ Template.Project.events({
         template.clockInitValue = Date.now();
         template.$("#clock").val(initialTime());
         return true;
+    },
+    // ENTRY BUTTONS
+    "click .entry .edit": function(event, template) {
+        // let btn = template.$(event.currentTarget);
+        // let createdAt = parseInt(btn.attr("data-created-at"), 10);
+        // let entries = Projects.findOne({_id: template.projectId}).entries;
+        // Projects.update({
+        //     _id: template.projectId
+        // }, {
+        //     $set: {
+        //         entries: entries.filter((entry) => {
+        //             return entry.createdAt !== createdAt;
+        //         })
+        //     }
+        // });
+    },
+    "click .entry .delete": function(event, template) {
+        let btn = template.$(event.currentTarget);
+        let createdAt = parseInt(btn.attr("data-created-at"), 10);
+        let entries = Projects.findOne({_id: template.projectId}).entries;
+        // console.log("new entries:", entries.filter((entry) => {
+        //     return entry.createdAt !== createdAt;
+        // }));
+        // db.coll.update({<cond to identify document}, {$pull: {'comments': {'name': <name>}}} )
+        Projects.update({
+            _id: template.projectId
+        }, {
+            $set: {
+                entries: entries.filter((entry) => {
+                    return entry.createdAt !== createdAt;
+                })
+            }
+        });
     }
 });

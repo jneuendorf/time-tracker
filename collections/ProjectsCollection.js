@@ -10,6 +10,30 @@ Projects = new Mongo.Collection('projects');
 // });
 
 Entry = new SimpleSchema({
+    createdAt: {
+        type: Number,
+        label: "Created At",
+        autoValue: function(entry) {
+            return Date.now();
+        },
+        // autoValue: function(entry) {
+        //     console.log(this);
+        //     if (this.isInsert) {
+        //         console.log("autoValue", arguments);
+        //         return Date.now();
+        //     }
+        //     else {
+        //         let value = this.field("createdAt").value;
+        //         if (value.getTime instanceof Function) {
+        //             return value.getTime();
+        //         }
+        //         return value;
+        //     }
+        // },
+        autoform: {
+            type: "hidden"
+        }
+    },
     date: {
         type: String,
         autoform: {
@@ -55,7 +79,7 @@ ProjectSchema = new SimpleSchema({
         type: Date,
         label: "Created At",
         autoValue: function() {
-            return new Date()
+            return new Date();
         },
         autoform: {
             type: "hidden"

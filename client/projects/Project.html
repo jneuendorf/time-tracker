@@ -53,11 +53,8 @@
                                 </div>
                             </div>
                             <br>
-                            <!-- <div class="btn-group btn-group-lg" data-toggle="buttons"> -->
                             <div class="btn-group" data-toggle="buttons">
-                                <button type="button" class="btn btn-primary" id="clock-reset">
-                                    <span class="glyphicon glyphicon-repeat"></span> Reset countdown
-                                </button>
+                                {{> IconButton icon="repeat" id="clock-reset" label="Reset timer"}}
 
                                 <label class="btn btn-default" id="clock-pause" disabled>
                                     <input type="radio" name="options" autocomplete="off">
@@ -77,18 +74,34 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-push-2">
                     {{#if entries}}
-                        <table class="table table-striped table-hover">
+                        <table class="entries table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Duration</th>
-                                    <th>Note</th>
+                                    <th class="date">Date</th>
+                                    <th class="duration">Duration</th>
+                                    <th class="note">Note</th>
+                                    <th class="buttons"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {{#each entries}}
-                                    <tr>
-                                        <td>{{duration}}</td>
-                                        <td>{{note}}</td>
+                                    <tr class="entry">
+                                        <td class="date">{{date}}</td>
+                                        <td class="duration">{{duration}}</td>
+                                        <td class="note">{{note}}</td>
+                                        <td class="buttons">
+                                            {{> IconButton icon="pencil" createdAt=createdAt classes="edit"}}
+                                            <!-- {{> IconButton icon="duplicate" createdAt=createdAt classes="duplicate"}} -->
+                                            {{#autoForm id=(concat "duplicateEntry" @index) type="update-pushArray" collection="Projects" doc=project scope="entries" class="duplicateEntry"}}
+                                                {{> afFieldInput name="date" type="hidden" value=date}}
+                                                {{> afFieldInput name="duration" type="hidden" value=duration}}
+                                                {{> afFieldInput name="note" type="hidden" value=note}}
+                                                <button type="submit" class="btn btn-primary">
+                                                    <span class="glyphicon glyphicon-duplicate"></span>
+                                                </button>
+                                            {{/autoForm}}
+                                            {{> IconButton buttonKind="danger" icon="trash" createdAt=createdAt classes="delete"}}
+                                        </td>
                                     </tr>
                                 {{/each}}
                             </tbody>
@@ -100,5 +113,17 @@
             </div>
         {{/with}}
         {{> AddEntriesModal}}
+        <!-- {{#afModal class="btn btn-primary" collection="Posts" operation="update" doc=_id}} -->
+        <!-- {{#afModal  class="btn btn-primary" id="AddEntriesForm" operation="update-pushArray" collection="Projects" doc=project scope="entries"}}
+              Add entries
+        {{/afModal}} -->
+        <!-- {{#autoForm id="AddEntriesForm" type="update-pushArray" collection="Projects" doc=project scope="entries" resetOnSuccess="true"}}
+            {{> afFormGroup name="date"}}
+            {{> afFormGroup name="duration"}}
+            {{> afFormGroup name="note"}}
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        {{/autoForm}} -->
     {{/unless}}
 </template>

@@ -1,33 +1,34 @@
 Template.AddEntriesModal.onCreated(function() {
+    console.log("creating AddEntriesModal");
     this.autorun(() => {
         this.subscribe("projects");
     });
 });
 
-Template.AddEntriesModal.onRendered(function() {
-    // TODO: make this work. seems not be reactive (get called but no datepicker after 1st submit)
-    this.$(".date").datetimepicker({
+let initDatetimepicker = function(container) {
+    $find(".date", container).datetimepicker({
         format: "DD.MM.YY"
-    }).on("dp.hide", () => {
-        this.$(".duration").focus();
-    });
-    this.$(".duration").datetimepicker({
+    }).focus();
+    $find(".duration", container).datetimepicker({
         format: "HH:mm",
         keyBinds: {
-            "up": function(widget) {
+            up: function(widget) {
                 this.date(this.date().clone().add(5, 'm'));
             },
-            "down": function(widget) {
+            down: function(widget) {
                 this.date(this.date().clone().subtract(5, 'm'));
             }
         }
-    }).on("dp.hide", () => {
-        this.$(".note").focus();
     });
-    let modal = this.$("#AddEntriesModal");
+};
+global.TemplateHooks.initDatetimepicker = initDatetimepicker;
+
+Template.AddEntriesModal.onRendered(function() {
+    let modal = $(this.find("#AddEntriesModal"));
     modal.on("shown.bs.modal", () => {
-        this.$(".date").focus();
+        modal.find(".date").focus();
     });
+    initDatetimepicker(modal);
 });
 
 Template.AddEntriesModal.helpers({
@@ -36,12 +37,15 @@ Template.AddEntriesModal.helpers({
         return Projects.findOne({
             _id: id
         });
+    },
+    now: () => {
+        return Date.now();
     }
 });
 
-Template.AddEntriesModal.events({
-    "submit": function(event, template) {
-        // TODO: make this work. seems not be reactive (get called but nothing's focused)
-        template.$(".date").focus();
-    }
-});
+// Template.AddEntriesModal.events({
+//     "submit": function(event, template) {
+//         // TODO: make this work. seems not be reactive (get called but nothing's focused)
+//         template.$(".date").focus();
+//     }
+// });

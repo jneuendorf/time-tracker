@@ -38,3 +38,9 @@ Template.Projects.helpers({
         return groupedProjects;
     }
 });
+
+Template.Projects.events({
+    "click .settings": function(event, template){
+        // TODO: show modal with settings (i.e. for configuring an api)
+    }
+});
