@@ -90,15 +90,21 @@
                                         <td class="duration">{{duration}}</td>
                                         <td class="note">{{note}}</td>
                                         <td class="buttons">
-                                            {{> IconButton icon="pencil" createdAt=createdAt classes="edit"}}
-                                            <!-- {{> IconButton icon="duplicate" createdAt=createdAt classes="duplicate"}} -->
+                                            <!-- {{> IconButton icon="pencil" createdAt=createdAt classes="edit"}} -->
+                                            {{#autoForm id=(concat "editEntry" @index) type="update" collection="Projects" doc=project scope="entries" class="editEntry"}}
+                                                {{> afFieldInput name="date" type="hidden" value=date}}
+                                                {{> afFieldInput name="duration" type="hidden" value=duration}}
+                                                {{> afFieldInput name="note" type="hidden" value=note}}
+                                                {{> IconButton icon="pencil"  buttonType="submit"}}
+                                                <!-- <button type="submit" class="btn btn-primary">
+                                                    <span class="glyphicon glyphicon-duplicate"></span>
+                                                </button> -->
+                                            {{/autoForm}}
                                             {{#autoForm id=(concat "duplicateEntry" @index) type="update-pushArray" collection="Projects" doc=project scope="entries" class="duplicateEntry"}}
                                                 {{> afFieldInput name="date" type="hidden" value=date}}
                                                 {{> afFieldInput name="duration" type="hidden" value=duration}}
                                                 {{> afFieldInput name="note" type="hidden" value=note}}
-                                                <button type="submit" class="btn btn-primary">
-                                                    <span class="glyphicon glyphicon-duplicate"></span>
-                                                </button>
+                                                {{> IconButton icon="duplicate" buttonType="submit"}}
                                             {{/autoForm}}
                                             {{> IconButton buttonKind="danger" icon="trash" createdAt=createdAt classes="delete"}}
                                         </td>
