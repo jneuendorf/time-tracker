@@ -16,20 +16,6 @@ Entry = new SimpleSchema({
         autoValue: function(entry) {
             return Date.now();
         },
-        // autoValue: function(entry) {
-        //     console.log(this);
-        //     if (this.isInsert) {
-        //         console.log("autoValue", arguments);
-        //         return Date.now();
-        //     }
-        //     else {
-        //         let value = this.field("createdAt").value;
-        //         if (value.getTime instanceof Function) {
-        //             return value.getTime();
-        //         }
-        //         return value;
-        //     }
-        // },
         autoform: {
             type: "hidden"
         }
@@ -38,7 +24,8 @@ Entry = new SimpleSchema({
         type: String,
         autoform: {
             afFieldInput: {
-                class: "date"
+                class: "date",
+                // type: "bootstrap-datetimepicker"
             }
         }
     },

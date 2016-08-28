@@ -55,7 +55,6 @@
                             <br>
                             <div class="btn-group" data-toggle="buttons">
                                 {{> IconButton icon="repeat" id="clock-reset" label="Reset timer"}}
-
                                 <label class="btn btn-default" id="clock-pause" disabled>
                                     <input type="radio" name="options" autocomplete="off">
                                     <span class="glyphicon glyphicon-pause"></span> Pause
@@ -90,17 +89,29 @@
                                         <td class="duration">{{duration}}</td>
                                         <td class="note">{{note}}</td>
                                         <td class="buttons">
-                                            <!-- {{> IconButton icon="pencil" createdAt=createdAt classes="edit"}} -->
-                                            {{#autoForm id=(concat "editEntry" @index) type="update" collection="Projects" doc=project scope="entries" class="editEntry"}}
+                                            {{#let modalId=(concat "editEntry" @index "Modal")}}
+                                                {{#Modal id=modalId title="Edit entry"}}
+                                                    {{attachToThis index=@index}}
+                                                    <!-- {{> quickForm id=(concat "editEntry" @index) type="update" collection="Projects" doc=project setArrayItems=true}} -->
+                                                    {{#autoForm id=(concat "editEntry" @index) type="update" collection="Projects" doc=project setArrayItems=true}}
+                                                        {{> afFormGroup name=(concat "entries." this.index ".date")}}
+                                                        {{> afFormGroup name=(concat "entries." this.index ".duration")}}
+                                                        {{> afFormGroup name=(concat "entries." this.index ".note")}}
+                                                        {{> afSubmitBtn}}
+                                                    {{/autoForm}}
+                                                {{/Modal}}
+                                                {{> IconButton icon="pencil" createdAt=createdAt classes="edit" dataToggle="modal" dataTarget=(concat "#" modalId)}}
+                                            {{/let}}
+                                            <!-- {{#autoForm id=(concat "editEntry" @index) type="update" collection="Projects" doc=project scope="entries" class="editEntry"}}
                                                 {{> afFieldInput name="date" type="hidden" value=date}}
                                                 {{> afFieldInput name="duration" type="hidden" value=duration}}
                                                 {{> afFieldInput name="note" type="hidden" value=note}}
                                                 {{> IconButton icon="pencil"  buttonType="submit"}}
-                                                <!-- <button type="submit" class="btn btn-primary">
+                                                <!- <button type="submit" class="btn btn-primary">
                                                     <span class="glyphicon glyphicon-duplicate"></span>
-                                                </button> -->
-                                            {{/autoForm}}
-                                            {{#autoForm id=(concat "duplicateEntry" @index) type="update-pushArray" collection="Projects" doc=project scope="entries" class="duplicateEntry"}}
+                                                </button> ->
+                                            {/autoForm} -->
+                                            {{#autoForm id=(concat "duplicateEntry" @index) type="update-pushArray" collection="Projects" doc=project scope="entries"}}
                                                 {{> afFieldInput name="date" type="hidden" value=date}}
                                                 {{> afFieldInput name="duration" type="hidden" value=duration}}
                                                 {{> afFieldInput name="note" type="hidden" value=note}}

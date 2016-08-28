@@ -20,9 +20,6 @@ global.$find = function(selector, context) {
     if (!context) {
         context = this;
     }
-    // if (!(context.find instanceof Function)) {
-    //     context = $(context)
-    // }
     return $(context.find(selector));
 };
 

@@ -1,5 +1,5 @@
 <template name="IconButton">
-    <button type="{{firstOf buttonType 'button'}}" id="{{id}}" class="btn btn-{{firstOf buttonKind 'primary'}} {{classes}}" data-created-at={{createdAt}}>
+    <button type="{{firstOf buttonType 'button'}}" id="{{id}}" class="btn btn-{{firstOf buttonKind 'primary'}} {{classes}}" data-created-at={{createdAt}} data-toggle="{{dataToggle}}" data-target="{{dataTarget}}">
         <span class="glyphicon glyphicon-{{icon}}"></span> {{label}}
     </button>
 </template>
