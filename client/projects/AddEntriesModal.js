@@ -10,7 +10,8 @@ let initDatetimepicker = function(container) {
         format: "DD.MM.YY"
     }).focus();
     $find(".duration", container).datetimepicker({
-        format: "HH:mm",
+        format: "HH:mm:ss",
+        // stepping: 5
         keyBinds: {
             up: function(widget) {
                 this.date(this.date().clone().add(5, 'm'));
@@ -27,6 +28,8 @@ Template.AddEntriesModal.onRendered(function() {
     let modal = $(this.find("#AddEntriesModal"));
     modal.on("shown.bs.modal", () => {
         modal.find(".date").focus();
+        global.temporaryCallbacks.AddEntriesModalShown(modal);
+        global.temporaryCallbacks.AddEntriesModalShown = function(modal) {};
     });
     initDatetimepicker(modal);
 });

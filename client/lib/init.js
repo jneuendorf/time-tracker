@@ -23,6 +23,12 @@ global.$find = function(selector, context) {
     return $(context.find(selector));
 };
 
+global.temporaryCallbacks = {
+    // USED CALLBACKS:
+    // AddEntriesModalShown: function(modal) {}
+};
+
+
 // GLOBAL VARIABLES
 
 global.TemplateHooks = {};

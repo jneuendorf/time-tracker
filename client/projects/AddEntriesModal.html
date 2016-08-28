@@ -1,6 +1,5 @@
 <template name="AddEntriesModal">
     {{#Modal id="AddEntriesModal" title="Add new entries"}}
-        <!-- {{> quickForm collection="Projects" doc=project id="AddEntriesForm" type="update" class="add-entries-form" omitFields="name,description"}} -->
         {{#autoForm id="AddEntriesForm" type="update-pushArray" collection="Projects" doc=project scope="entries" resetOnSuccess="true" class=now}}
             {{> afFormGroup name="date"}}
             {{> afFormGroup name="duration"}}

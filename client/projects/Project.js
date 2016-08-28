@@ -9,8 +9,12 @@ Template.Project.onCreated(function() {
     this.projectId = FlowRouter.getParam("id");
 });
 
+let formatTime = (value) => {
+    return numeral(value).format("00:00:00").replace(/^(\d)\:/, "0$1:");
+}
+
 let initialTime = () => {
-    return numeral(0).format("00:00:00");
+    return formatTime(0);
 }
 
 let getCurrentProject = function() {
@@ -37,10 +41,19 @@ Template.Project.helpers({
 });
 
 Template.Project.events({
-    "click #clock-save": function(event, template) {
-        let val = template.$("#clock").val();
-    },
     // STOPWATCH BEHAVIOR
+    "click #clock-save": function(event, template) {
+        template.$("#clock-pause").click();
+        let val = template.$("#clock").val();
+        let modal = $("#AddEntriesModal");
+        modal.find("input.duration").val(val);
+        // auto fill in today's date according to datetimepicker's format
+        modal.find("input.date").focus();
+        global.temporaryCallbacks.AddEntriesModalShown = function(modal) {
+            modal.find("input.note").focus();
+        };
+        modal.modal("show");
+    },
     "click #clock-resume": function(event, template) {
         let clockValue = template.clockValue;
         let clock = template.$("#clock");
@@ -51,7 +64,7 @@ Template.Project.events({
         template.clockTimer = setInterval(() => {
             let seconds = (Date.now() - template.clockInitValue) / 1000;
             template.currentValue = seconds;
-            clock.val(numeral(template.clockValue + seconds).format("00:00:00"));
+            clock.val(formatTime(template.clockValue + seconds));
         }, 1000);
     },
     "click #clock-pause": function(event, template) {
@@ -64,21 +77,7 @@ Template.Project.events({
         template.$("#clock").val(initialTime());
         return true;
     },
-    // ENTRY BUTTONS
-    "click .entry .edit": function(event, template) {
-        // let btn = template.$(event.currentTarget);
-        // let createdAt = parseInt(btn.attr("data-created-at"), 10);
-        // let entries = Projects.findOne({_id: template.projectId}).entries;
-        // Projects.update({
-        //     _id: template.projectId
-        // }, {
-        //     $set: {
-        //         entries: entries.filter((entry) => {
-        //             return entry.createdAt !== createdAt;
-        //         })
-        //     }
-        // });
-    },
+    // ENTRY BUTTONS IN TABLE
     "click .entry .delete": function(event, template) {
         let btn = template.$(event.currentTarget);
         let createdAt = parseInt(btn.attr("data-created-at"), 10);
