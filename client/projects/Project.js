@@ -37,6 +37,16 @@ Template.Project.helpers({
 });
 
 Template.Project.events({
+    "submit #AddEntriesForm": function(event, template) {
+        template.$("#clock-reset").click();
+    },
+    // BACK TO OVERVIEW
+    "click .back": function(event, template) {
+        if (template.clockTimer) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    },
     // STOPWATCH BEHAVIOR
     "click #clock-save": function(event, template) {
         template.$("#clock-pause").click();
@@ -48,6 +58,7 @@ Template.Project.events({
         global.temporaryCallbacks.AddEntriesModalShown = function(modal) {
             modal.find("input.note").focus();
         };
+        template.$("#clock-save").removeClass("pulsing");
         modal.modal("show");
     },
     "click #clock-resume": function(event, template) {
@@ -62,10 +73,19 @@ Template.Project.events({
             template.currentValue = seconds;
             clock.val(formatTime(template.clockValue + seconds));
         }, 1000);
+        template.$(".back").addClass("disabled");
+        let resumeBtn = template.$("#clock-resume");
+        if (resumeBtn.hasClass("pulsing")) {
+            resumeBtn.removeClass("pulsing");
+        }
+        resumeBtn.children("span").last().text("Resume");
     },
     "click #clock-pause": function(event, template) {
         template.clockValue += template.currentValue;
         clearInterval(template.clockTimer);
+        template.clockTimer = null;
+        template.$(".back").removeClass("disabled");
+        template.$("#clock-save").addClass("pulsing");
     },
     "click #clock-reset": function(event, template) {
         template.clockValue = 0;

@@ -17,7 +17,6 @@ Template.registerHelper("concat", function() {
 
 Template.registerHelper("attachToThis", function(kwargs) {
     kwargs = kwargs.hash;
-    console.log(kwargs);
     for (var key in kwargs) {
         if (kwargs.hasOwnProperty(key) && !this[key]) {
             this[key] = kwargs[key];

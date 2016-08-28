@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-xs-3">
                     <h1 class="nav">
-                        <a href="/">
+                        <a href="/" class="back">
                             <span class="glyphicon glyphicon glyphicon-chevron-left"></span>
                             <span class="glyphicon glyphicon-list-alt hidden-xs"></span>
                         </a>
@@ -54,16 +54,21 @@
                             </div>
                             <br>
                             <div class="btn-group" data-toggle="buttons">
-                                {{> IconButton icon="repeat" id="clock-reset" label="Reset timer"}}
-                                <label class="btn btn-default" id="clock-pause" disabled>
-                                    <input type="radio" name="options" autocomplete="off">
-                                    <span class="glyphicon glyphicon-pause"></span> Pause
-                                </label>
-
                                 <label class="btn btn-default" id="clock-resume">
                                     <input type="radio" name="options" autocomplete="off">
-                                    <span class="glyphicon glyphicon-play"></span> Start
+                                    <span class="glyphicon glyphicon-play"></span>
+                                    <span>
+                                        Start
+                                    </span>
                                 </label>
+                                <label class="btn btn-default" id="clock-pause" disabled>
+                                    <input type="radio" name="options" autocomplete="off">
+                                    <span class="glyphicon glyphicon-pause"></span>
+                                    <span>
+                                        Pause
+                                    </span>
+                                </label>
+                                {{> IconButton icon="repeat" id="clock-reset" label="Reset timer"}}
                             </div>
                         </div>
                     </div>
@@ -124,7 +129,10 @@
                             </tbody>
                         </table>
                     {{else}}
-                        <h3>No entries yet...</h3>
+                        <h3 class="noEntries">No entries yet. Start the timer or add entries manually.</h3>
+                        <script type="text/javascript">
+                            $("#clock-resume").addClass("pulsing");
+                        </script>
                     {{/if}}
                 </div>
             </div>

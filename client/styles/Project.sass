@@ -1,13 +1,52 @@
-h1.nav a
+$bootstrap-blue: #337ab7
+$bootstrap-gray: #cccccc
+
+@keyframes pulse-blue
+    70%
+        box-shadow: 0 0 0 4px $bootstrap-blue
+        color: lighten($bootstrap-blue, 10%)
+
+    100%
+        box-shadow: 0 0 0 0 $bootstrap-blue
+        color: white
+@keyframes pulse-gray
+    70%
+        background-color: $bootstrap-gray
+
+    100%
+        background-color: white
+
+
+// HEADER ROW
+h1.nav .back
     &:hover
         text-decoration: none
+    &:focus
+        color: $bootstrap-blue
+        outline: none
+        text-decoration: none
+
+    &.disabled
+        cursor: not-allowed
+        opacity: 0.65
 
 h1.mod
     text-align: right
 
+.noEntries
+    text-align: center
+
+// TIMER
 .clockContainer
     text-align: right
 
+    #clock-save.pulsing
+        animation: pulse-blue 1.5s infinite
+
+    #clock-resume.pulsing
+        animation: pulse-gray 1.5s infinite
+
+// ENTRIES
 .table
     thead
         .date
