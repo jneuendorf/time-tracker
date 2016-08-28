@@ -45,10 +45,3 @@ Template.AddEntriesModal.helpers({
         return Date.now();
     }
 });
-
-// Template.AddEntriesModal.events({
-//     "submit": function(event, template) {
-//         // TODO: make this work. seems not be reactive (get called but nothing's focused)
-//         template.$(".date").focus();
-//     }
-// });

@@ -18,9 +18,7 @@ let initialTime = () => {
 }
 
 let getCurrentProject = function() {
-    let id = FlowRouter.getParam("id");
     let project = Projects.findOne({
-        // _id: id
         _id: Template.instance().projectId
     });
     return project;
@@ -28,13 +26,11 @@ let getCurrentProject = function() {
 
 Template.Project.helpers({
     project: () => {
-        // let id = FlowRouter.getParam("id");
         let project = Projects.findOne({
             _id: Template.instance().projectId
         });
         return project;
     },
-    // project: getCurrentProject,
     initialTime: () => {
         return initialTime();
     }
