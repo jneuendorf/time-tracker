@@ -1,6 +1,6 @@
-<template name="AddEntriesModal">
-    {{#Modal id="AddEntriesModal" title="Add new entries"}}
-        {{#autoForm id="AddEntriesForm" type="update-pushArray" collection="Projects" doc=project scope="entries" resetOnSuccess="true"}}
+<template name="SettingsModal">
+    {{#Modal id="SettingsModal" title="Global settings"}}
+        {{#autoForm id="SettingsForm" type="update-pushArray" collection="Projects"}}
             {{> afFormGroup name="date"}}
             {{> afFormGroup name="duration"}}
             {{> afFormGroup name="note"}}

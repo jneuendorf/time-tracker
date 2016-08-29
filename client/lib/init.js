@@ -23,12 +23,22 @@ global.$find = function(selector, context) {
     return $(context.find(selector));
 };
 
-global.temporaryCallbacks = {
-    // USED CALLBACKS:
-    // AddEntriesModalShown: function(modal) {}
+global.formatDate = function(date) {
+    return moment(date).format("DD.MM.YY");
 };
+
+global.parseDate = function(dateString) {
+    return moment(dateString, global.dateFormat);
+}
 
 
 // GLOBAL VARIABLES
 
+global.dateFormat = "DD.MM.YY";
+
 global.TemplateHooks = {};
+
+global.temporaryCallbacks = {
+    // USED CALLBACKS:
+    // AddEntriesModalShown: function(modal) {}
+};

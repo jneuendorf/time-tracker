@@ -7,7 +7,7 @@ Template.AddEntriesModal.onCreated(function() {
 
 let initDatetimepicker = function(container) {
     $find(".date", container).datetimepicker({
-        format: "DD.MM.YY"
+        format: global.dateFormat
     }).focus();
     $find(".duration", container).datetimepicker({
         format: "HH:mm:ss",
@@ -40,8 +40,5 @@ Template.AddEntriesModal.helpers({
         return Projects.findOne({
             _id: id
         });
-    },
-    now: () => {
-        return Date.now();
     }
 });

@@ -7,6 +7,8 @@ Template.Project.onCreated(function() {
     this.currentValue = 0;
     this.clockValue = 0;
     this.projectId = FlowRouter.getParam("id");
+    this.viewMode = new ReactiveVar("all");
+    this.viewModeOffset = new ReactiveVar(0);
 });
 
 let formatTime = (value) => {
@@ -17,22 +19,78 @@ let initialTime = () => {
     return formatTime(0);
 }
 
-let getCurrentProject = function() {
-    let project = Projects.findOne({
-        _id: Template.instance().projectId
+let filterBy = (entries, kind) => {
+    let refValue = moment()[kind]();
+    console.log(kind + "ly", refValue);
+    return entries.filter((entry) => {
+        return global.parseDate(entry.date)[kind]() === refValue;
     });
-    return project;
 };
 
 Template.Project.helpers({
-    project: () => {
+    project: function() {
         let project = Projects.findOne({
             _id: Template.instance().projectId
         });
         return project;
     },
-    initialTime: () => {
+    entries: function() {
+        let template = Template.instance();
+        let project = Projects.findOne({
+            _id: template.projectId
+        });
+        let entries = project.entries;
+        let viewMode = template.viewMode.get();
+        switch (viewMode) {
+            case "all":
+                console.log("all");
+                break;
+            case "today":
+                console.log("today");
+                let todayStr = global.formatDate(new Date());
+                entries = entries.filter((entry) => {
+                    return entry.date === todayStr;
+                });
+                break;
+            case "weekly":
+                entries = filterBy(entries, "week");
+                break;
+            case "monthly":
+                entries = filterBy(entries, "month");
+                break;
+            case "annually":
+                entries = filterBy(entries, "year");
+                break;
+
+        }
+        return entries.map((entry, index) => {
+            entry.index = index;
+            return entry;
+        }).sort((a, b) => {
+            a = global.parseDate(a.date);
+            b = global.parseDate(b.date);
+            if (a.isBefore(b)) {
+                return -1;
+            }
+            if (a.isAfter(b)) {
+                return 1;
+            }
+            return 0;
+        });
+    },
+    initialTime: function() {
         return initialTime();
+    },
+    viewModes: function() {
+        let viewModes = ["all", "today", "weekly", "monthly", "annually"];
+        let currentViewMode = Template.instance().viewMode.get();
+        return viewModes.map((viewMode) => {
+            return {
+                name: viewMode,
+                labelClass: (currentViewMode === viewMode ? "active" : ""),
+                iconClass: (currentViewMode === viewMode ? "eye-open" : "eye-close")
+            };
+        });
     }
 });
 
@@ -93,7 +151,14 @@ Template.Project.events({
         template.$("#clock").val(initialTime());
         return true;
     },
-    // ENTRY BUTTONS IN TABLE
+    // VIEW MODE BUTTONS
+    "click .btn.viewMode": function(event, template) {
+        let btn = template.$(event.currentTarget);
+        let viewMode = btn.attr("data-view-mode");
+        template.viewMode.set(viewMode);
+        return true;
+    },
+    // ENTRY MODIFICATION BUTTONS IN TABLE
     "click .entry .delete": function(event, template) {
         let btn = template.$(event.currentTarget);
         let createdAt = parseInt(btn.attr("data-created-at"), 10);

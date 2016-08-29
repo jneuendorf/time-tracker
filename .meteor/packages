@@ -29,6 +29,7 @@ huttonr:bootstrap3
 kadira:blaze-layout
 kadira:flow-router
 meteortoys:allthings
+momentjs:moment
 numeral:numeral
 peernohell:c3
 # https://themeteorchef.com/snippets/reactive-dict-reactive-vars-and-session-variables/#tmc-reactive-dictionary
