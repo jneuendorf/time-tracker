@@ -39,7 +39,10 @@ Template.Project.helpers({
         let project = Projects.findOne({
             _id: template.projectId
         });
-        let entries = project.entries;
+        let entries = project.entries.map((entry, index) => {
+            entry.index = index;
+            return entry;
+        });
         let viewMode = template.viewMode.get();
         switch (viewMode) {
             case "all":
@@ -63,10 +66,7 @@ Template.Project.helpers({
                 break;
 
         }
-        return entries.map((entry, index) => {
-            entry.index = index;
-            return entry;
-        }).sort((a, b) => {
+        return entries.sort((a, b) => {
             a = global.parseDate(a.date);
             b = global.parseDate(b.date);
             if (a.isBefore(b)) {
