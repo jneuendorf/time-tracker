@@ -1,11 +1,12 @@
 <template name="SettingsModal">
     {{#Modal id="SettingsModal" title="Global settings"}}
-        {{#autoForm id="SettingsForm" type="update-pushArray" collection="Projects"}}
+        {{> quickForm collection="Settings" id="SettingsForm" type="update" buttonContent="Save settings"}}
+        <!-- {{#autoForm id="SettingsForm" type="update" collection="Settings"}}
             {{> afFormGroup name="date"}}
             {{> afFormGroup name="duration"}}
             {{> afFormGroup name="note"}}
             {{> afSubmitBtn}}
             {{> TemplateHooks onRenderedCallback="initDatetimepicker" container="#AddEntriesForm"}}
-        {{/autoForm}}
+        {{/autoForm}} -->
     {{/Modal}}
 </template>

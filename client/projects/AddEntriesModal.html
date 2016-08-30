@@ -1,10 +1,10 @@
 <template name="AddEntriesModal">
-    {{#Modal id="AddEntriesModal" title="Add new entries"}}
+    {{#Modal id="AddEntriesModal" title="Add a new entry"}}
         {{#autoForm id="AddEntriesForm" type="update-pushArray" collection="Projects" doc=project scope="entries" resetOnSuccess="true"}}
             {{> afFormGroup name="date"}}
             {{> afFormGroup name="duration"}}
             {{> afFormGroup name="note"}}
-            {{> afSubmitBtn}}
+            {{> afSubmitBtn buttonContent="Add entry"}}
             {{> TemplateHooks onRenderedCallback="initDatetimepicker" container="#AddEntriesForm"}}
         {{/autoForm}}
     {{/Modal}}

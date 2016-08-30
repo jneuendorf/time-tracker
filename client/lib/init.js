@@ -39,6 +39,5 @@ global.dateFormat = "DD.MM.YY";
 global.TemplateHooks = {};
 
 global.temporaryCallbacks = {
-    // USED CALLBACKS:
-    // AddEntriesModalShown: function(modal) {}
+    AddEntriesModalShown: function(modal) {}
 };

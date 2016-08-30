@@ -1,29 +1,16 @@
 Settings = new Mongo.Collection('settings');
 
 SettingsSchema = new SimpleSchema({
-    name: {
+    dateFormat: {
         type: String,
-        label: "Name"
+        label: "Date format (momentJS notation)",
+        defaultValue: "DD.MM.YY"
     },
-    description: {
+    csvDelimiter: {
         type: String,
-        label: "Description"
+        label: "CSV delimiter",
+        defaultValue: ","
     },
-    entries: {
-        type: [Entry],
-        defaultValue: [],
-        optional: true
-    },
-    createdAt: {
-        type: Date,
-        label: "Created At",
-        autoValue: function() {
-            return new Date();
-        },
-        autoform: {
-            type: "hidden"
-        }
-    }
 });
 
 Settings.attachSchema(SettingsSchema);

@@ -1,10 +1,10 @@
-Template.Projects.onCreated(function() {
+Template.ProjectOverview.onCreated(function() {
     this.autorun(() => {
         this.subscribe("projects");
     });
 });
 
-Template.Projects.helpers({
+Template.ProjectOverview.helpers({
     projects: () => {
         let projects = Projects.find({}, {sort: {createdAt: -1}});
         return projects;
@@ -21,8 +21,8 @@ Template.Projects.helpers({
     }
 });
 
-Template.Projects.events({
-    "click .settings": function(event, template){
-        // TODO: show modal with settings (i.e. for configuring an api)
-    }
-});
+// Template.ProjectOverview.events({
+//     "click .settings": function(event, template){
+//         // TODO: show modal with settings (i.e. for configuring an api)
+//     }
+// });

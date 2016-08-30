@@ -1,4 +1,4 @@
-<template name="Projects">
+<template name="ProjectOverview">
     {{#unless Template.subscriptionsReady}}
         <script type="text/javascript">
             $("#AjaxLoader").fadeIn(0);
@@ -16,9 +16,7 @@
             </div>
             <div class="col-xs-1">
                 <h1>
-                    <button class="btn btn-primary btn-lg settings">
-                        <span class="glyphicon glyphicon-cog"></span>
-                    </button>
+                    {{> IconButton icon="cog" classes="btn-lg settings" dataToggle="modal" dataTarget="#SettingsModal"}}
                 </h1>
             </div>
         </div>

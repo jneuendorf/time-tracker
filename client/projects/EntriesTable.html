@@ -1,0 +1,87 @@
+<template name="EntriesTable">
+    <!-- {{#let enties=getEntries}}{{/let}} -->
+    <!-- VIEW MODES -->
+    <div class="row">
+        <div class="col-xs-8 col-xs-push-2 viewModes">
+            {{#if or entries.length (not (equals viewMode "all"))}}
+                <div class="btn-group" data-toggle="buttons">
+                    {{#each viewModes}}
+                        <label class="btn btn-primary {{labelClass}} viewMode" data-view-mode="{{name}}">
+                            <input type="radio" name="viewMode" autocomplete="off">
+                            <span class="glyphicon glyphicon-{{iconClass}}"></span>
+                            <span>{{name}}</span>
+                        </label>
+                    {{/each}}
+                </div>
+            {{/if}}
+        </div>
+    </div>
+    <!-- ENTRIES TABLE -->
+    <div class="row">
+        <div class="col-xs-8 col-xs-push-2">
+            {{#if entries}}
+                <table class="entries table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="date">Date</th>
+                            <th class="duration">Duration</th>
+                            <th class="note">Note</th>
+                            <th class="buttons"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#let doc=this.project}}
+                            {{#each entries}}
+                                <tr class="entry">
+                                    <td class="date">{{date}}</td>
+                                    <td class="duration">{{duration}}</td>
+                                    <td class="note">{{note}}</td>
+                                    <td class="buttons">
+                                        {{#let modalId=(concat "editEntry" index "Modal")}}
+                                            {{#Modal id=modalId title="Edit entry"}}
+                                                {{attachToThis index=index}}
+                                                {{#autoForm id=(concat "editEntry" index) type="update" collection="Projects" doc=doc setArrayItems=true}}
+                                                    {{> afFormGroup name=(concat "entries." this.index ".date")}}
+                                                    {{> afFormGroup name=(concat "entries." this.index ".duration")}}
+                                                    {{> afFormGroup name=(concat "entries." this.index ".note")}}
+                                                    {{> afSubmitBtn}}
+                                                {{/autoForm}}
+                                            {{/Modal}}
+                                            {{> IconButton icon="pencil" createdAt=createdAt classes="edit" dataToggle="modal" dataTarget=(concat "#" modalId)}}
+                                        {{/let}}
+                                        {{#autoForm id=(concat "duplicateEntry" index) type="update-pushArray" collection="Projects" doc=doc scope="entries"}}
+                                            {{> afFieldInput name="date" type="hidden" value=date}}
+                                            {{> afFieldInput name="duration" type="hidden" value=duration}}
+                                            {{> afFieldInput name="note" type="hidden" value=note}}
+                                            {{> IconButton icon="duplicate" buttonType="submit"}}
+                                        {{/autoForm}}
+                                        {{> IconButton buttonKind="danger" icon="trash" createdAt=createdAt classes="delete"}}
+                                    </td>
+                                </tr>
+                            {{/each}}
+                        {{/let}}
+                    </tbody>
+                </table>
+            {{else}}
+                <h3 class="noEntries">
+                    {{#if equals viewMode "all"}}
+                        No entries yet. Start the timer or add entries manually.
+                    {{else}}
+                        No entries to show.
+                    {{/if}}
+                </h3>
+                <script type="text/javascript">
+                    (function() {
+                        let resumeBtn = $("#clock-resume");
+                        resumeBtn.addClass("pulsing");
+                        setTimeout(() => {
+                            if (resumeBtn.hasClass("pulsing")) {
+                                resumeBtn.removeClass("pulsing");
+                            }
+                        }, 5300);
+                    }());
+                </script>
+            {{/if}}
+        </div>
+    </div>
+</template>
