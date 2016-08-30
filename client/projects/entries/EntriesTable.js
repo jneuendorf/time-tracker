@@ -19,21 +19,23 @@ let csvStringifyArray = (array, delimiter) => {
     return array.map((item) => {
         if (typeof item === "string") {
             item = item.replace('"', '""');
-            if (item.indexOf(" ") >= 0) {
+            if (item.indexOf(delimiter) >= 0) {
                 item = '"' + item + '"';
             }
         }
         return item;
-    }).join(delimiter) + "\n";
+    }).join(delimiter);
 }
 
-let csvStringifyObject = (object, delimiter) => {
+let csvStringifyObject = (object, delimiter, excludeKeys) => {
     let array = [];
-    for (var key in object) {
-        if (object.hasOwnProperty(key)) {
-            array.push(object[key]);
-        }
+    var keys = Object.keys(object).filter((key) => {
+        return excludeKeys.indexOf(key) < 0;
+    });
+    for (let i = 0; i < keys.length; i++) {
+        array.push(object[keys[i]]);
     }
+    console.log(array);
     return csvStringifyArray(array, delimiter);
 };
 
@@ -41,10 +43,18 @@ let csvStringifyEntries = (entries, delimiter) => {
     if (entries.length === 0) {
         return "";
     }
-    let header = csvStringifyArray(Object.keys(entries[0]), delimiter)
-    return header + entries.map((entry) => {
-        return csvStringifyObject(entry);
-    })
+    if (!delimiter) {
+        delimiter = ",";
+    }
+    let excludeKeys = ["createdAt", "index"];
+    let header = csvStringifyArray(
+        Object.keys(entries[0]).filter((key) => {
+            return excludeKeys.indexOf(key) < 0;
+        }),
+        delimiter)
+    return header + "\n" + entries.map((entry) => {
+        return csvStringifyObject(entry, delimiter, excludeKeys);
+    }).join("\n");
 };
 
 Template.EntriesTable.helpers({
@@ -116,7 +126,8 @@ Template.EntriesTable.events({
     "click #exportCsv": function(event, template) {
         let viewMode = template.viewMode.get();
         let filename = template.data.project.name + "-" + viewMode + ".csv";
-        let blob = new Blob([csvStringifyEntries(template.entries)], {type: "text/plain;charset=utf-8"});
+        // TODO: get delimiter from settings
+        let blob = new Blob([csvStringifyEntries(template.entries, ",")], {type: "text/plain;charset=utf-8"});
         saveAs(blob, filename);
     }
 });
