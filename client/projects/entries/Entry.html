@@ -1,0 +1,24 @@
+<template name="Entry">
+    <tr class="entry">
+        {{#let project=this.project}}
+            {{#with this.entry}}
+                <td class="date">{{date}}</td>
+                <td class="duration">{{duration}}</td>
+                <td class="note">{{note}}</td>
+                <td class="buttons">
+                    {{#let modalId=(concat "editEntry" index "Modal")}}
+                        {{> EditEntryModal id=modalId doc=project entryIndex=index}}
+                        {{> IconButton icon="pencil" createdAt=createdAt classes="edit" dataToggle="modal" dataTarget=(concat "#" modalId)}}
+                    {{/let}}
+                    {{#autoForm id=(concat "duplicateEntry" index) type="update-pushArray" collection="Projects" doc=project scope="entries"}}
+                        {{> afFieldInput name="date" type="hidden" value=date}}
+                        {{> afFieldInput name="duration" type="hidden" value=duration}}
+                        {{> afFieldInput name="note" type="hidden" value=(concat note " copy")}}
+                        {{> IconButton icon="duplicate" buttonType="submit"}}
+                    {{/autoForm}}
+                    {{> IconButton buttonKind="danger" icon="trash" createdAt=createdAt classes="delete"}}
+                </td>
+            {{/with}}
+        {{/let}}
+    </tr>
+</template>

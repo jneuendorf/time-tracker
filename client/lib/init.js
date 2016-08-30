@@ -36,8 +36,10 @@ global.parseDate = function(dateString) {
 
 global.dateFormat = "DD.MM.YY";
 
-global.TemplateHooks = {};
+global.TemplateHooks = {
+    // initDatetimepicker in AddEntryModal
+};
 
 global.temporaryCallbacks = {
-    AddEntriesModalShown: function(modal) {}
+    AddEntryModalShown: function(modal) {}
 };

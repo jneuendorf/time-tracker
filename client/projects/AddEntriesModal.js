@@ -1,5 +1,5 @@
-Template.AddEntriesModal.onCreated(function() {
-    console.log("creating AddEntriesModal");
+Template.AddEntryModal.onCreated(function() {
+    console.log("creating AddEntryModal");
     this.autorun(() => {
         this.subscribe("projects");
     });
@@ -24,17 +24,17 @@ let initDatetimepicker = function(container) {
 };
 global.TemplateHooks.initDatetimepicker = initDatetimepicker;
 
-Template.AddEntriesModal.onRendered(function() {
-    let modal = $(this.find("#AddEntriesModal"));
+Template.AddEntryModal.onRendered(function() {
+    let modal = $(this.find("#AddEntryModal"));
     modal.on("shown.bs.modal", () => {
         modal.find(".date").focus();
-        global.temporaryCallbacks.AddEntriesModalShown(modal);
-        global.temporaryCallbacks.AddEntriesModalShown = function(modal) {};
+        global.temporaryCallbacks.AddEntryModalShown(modal);
+        global.temporaryCallbacks.AddEntryModalShown = function(modal) {};
     });
     initDatetimepicker(modal);
 });
 
-Template.AddEntriesModal.helpers({
+Template.AddEntryModal.helpers({
     project: () => {
         let id = FlowRouter.getParam("id");
         return Projects.findOne({

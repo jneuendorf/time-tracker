@@ -32,7 +32,8 @@
                     <tbody>
                         {{#let doc=this.project}}
                             {{#each entries}}
-                                <tr class="entry">
+                                {{> Entry project=doc entry=this}}
+                                <!-- <tr class="entry">
                                     <td class="date">{{date}}</td>
                                     <td class="duration">{{duration}}</td>
                                     <td class="note">{{note}}</td>
@@ -57,7 +58,7 @@
                                         {{/autoForm}}
                                         {{> IconButton buttonKind="danger" icon="trash" createdAt=createdAt classes="delete"}}
                                     </td>
-                                </tr>
+                                </tr> -->
                             {{/each}}
                         {{/let}}
                     </tbody>

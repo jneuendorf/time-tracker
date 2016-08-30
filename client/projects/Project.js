@@ -7,8 +7,6 @@ Template.Project.onCreated(function() {
     this.currentValue = 0;
     this.clockValue = 0;
     this.projectId = FlowRouter.getParam("id");
-    // this.viewMode = new ReactiveVar("all");
-    // this.viewModeOffset = new ReactiveVar(0);
 });
 
 let formatTime = (value) => {
@@ -32,7 +30,7 @@ Template.Project.helpers({
 });
 
 Template.Project.events({
-    "submit #AddEntriesForm": function(event, template) {
+    "submit #AddEntryForm": function(event, template) {
         template.$("#clock-reset").click();
     },
     // BACK TO OVERVIEW
@@ -46,11 +44,11 @@ Template.Project.events({
     "click #clock-save": function(event, template) {
         template.$("#clock-pause").click();
         let val = template.$("#clock").val();
-        let modal = $("#AddEntriesModal");
+        let modal = $("#AddEntryModal");
         modal.find("input.duration").val(val);
         // auto fill in today's date according to datetimepicker's format
         modal.find("input.date").focus();
-        global.temporaryCallbacks.AddEntriesModalShown = function(modal) {
+        global.temporaryCallbacks.AddEntryModalShown = function(modal) {
             modal.find("input.note").focus();
         };
         template.$("#clock-save").removeClass("pulsing");
@@ -87,24 +85,5 @@ Template.Project.events({
         template.clockInitValue = Date.now();
         template.$("#clock").val(initialTime());
         return true;
-    },
-    // ENTRY MODIFICATION BUTTONS IN TABLE
-    "click .entry .delete": function(event, template) {
-        let btn = template.$(event.currentTarget);
-        let createdAt = parseInt(btn.attr("data-created-at"), 10);
-        let entries = Projects.findOne({_id: template.projectId}).entries;
-        // console.log("new entries:", entries.filter((entry) => {
-        //     return entry.createdAt !== createdAt;
-        // }));
-        // db.coll.update({<cond to identify document}, {$pull: {'comments': {'name': <name>}}} )
-        Projects.update({
-            _id: template.projectId
-        }, {
-            $set: {
-                entries: entries.filter((entry) => {
-                    return entry.createdAt !== createdAt;
-                })
-            }
-        });
     }
 });

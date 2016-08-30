@@ -1,0 +1,10 @@
+<template name="EditEntryModal">
+    {{#Modal id=this.id title="Edit entry"}}
+        {{#autoForm id=(concat "editEntry" this.entryIndex) type="update" collection="Projects" doc=this.doc setArrayItems=true}}
+            {{> afFormGroup name=(concat "entries." this.entryIndex ".date")}}
+            {{> afFormGroup name=(concat "entries." this.entryIndex ".duration")}}
+            {{> afFormGroup name=(concat "entries." this.entryIndex ".note")}}
+            {{> afSubmitBtn}}
+        {{/autoForm}}
+    {{/Modal}}
+</template>
