@@ -4,6 +4,7 @@ Template.EntriesTable.onCreated(function() {
     });
     this.viewMode = new ReactiveVar("all");
     this.viewModeOffset = new ReactiveVar(0);
+    this.entries = [];
 });
 
 let filterBy = (entries, kind) => {
@@ -12,6 +13,38 @@ let filterBy = (entries, kind) => {
     return entries.filter((entry) => {
         return global.parseDate(entry.date)[kind]() === refValue;
     });
+};
+
+let csvStringifyArray = (array, delimiter) => {
+    return array.map((item) => {
+        if (typeof item === "string") {
+            item = item.replace('"', '""');
+            if (item.indexOf(" ") >= 0) {
+                item = '"' + item + '"';
+            }
+        }
+        return item;
+    }).join(delimiter) + "\n";
+}
+
+let csvStringifyObject = (object, delimiter) => {
+    let array = [];
+    for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+            array.push(object[key]);
+        }
+    }
+    return csvStringifyArray(array, delimiter);
+};
+
+let csvStringifyEntries = (entries, delimiter) => {
+    if (entries.length === 0) {
+        return "";
+    }
+    let header = csvStringifyArray(Object.keys(entries[0]), delimiter)
+    return header + entries.map((entry) => {
+        return csvStringifyObject(entry);
+    })
 };
 
 Template.EntriesTable.helpers({
@@ -42,7 +75,7 @@ Template.EntriesTable.helpers({
                 break;
 
         }
-        return entries.sort((a, b) => {
+        entries = entries.sort((a, b) => {
             a = global.parseDate(a.date);
             b = global.parseDate(b.date);
             if (a.isBefore(b)) {
@@ -53,6 +86,8 @@ Template.EntriesTable.helpers({
             }
             return 0;
         });
+        template.entries = entries;
+        return entries;
     },
     viewModes: function() {
         let viewModes = ["all", "today", "weekly", "monthly", "annually"];
@@ -78,4 +113,10 @@ Template.EntriesTable.events({
         template.viewMode.set(viewMode);
         return true;
     },
+    "click #exportCsv": function(event, template) {
+        let viewMode = template.viewMode.get();
+        let filename = template.data.project.name + "-" + viewMode + ".csv";
+        let blob = new Blob([csvStringifyEntries(template.entries)], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, filename);
+    }
 });

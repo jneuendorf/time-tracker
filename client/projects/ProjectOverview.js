@@ -20,9 +20,3 @@ Template.ProjectOverview.helpers({
         return groupedProjects;
     }
 });
-
-// Template.ProjectOverview.events({
-//     "click .settings": function(event, template){
-//         // TODO: show modal with settings (i.e. for configuring an api)
-//     }
-// });
