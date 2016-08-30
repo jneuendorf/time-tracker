@@ -1,4 +1,6 @@
 Template.ProjectTile.onRendered(function() {
+    let template = this;
+
     let light = "#ffffff";
     let lightShadow = "rgb(219, 219, 219)";
     let dark = "#3b3434";
@@ -46,9 +48,15 @@ Template.ProjectTile.onRendered(function() {
             },
             out: onOut,
             drop: function(event, ui) {
-                console.log("dropped");
                 onOut.call(this);
-                $("#ConfirmMergeModal").modal("show");
+
+                let modal = $("#MergeProjectsModal");
+                modal.find(".parentId").val(template.data._id);
+                modal.find(".parentName").val(template.data.name);
+                modal.find(".childId").val(ui.helper.find(".projectId").val());
+                modal.find(".childName").val(ui.helper.find(".name").text().trim());
+
+                modal.modal("show");
             }
         });
 });

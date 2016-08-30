@@ -1,0 +1,14 @@
+<template name="MergeProjectsModal">
+    {{#Modal id="MergeProjectsModal" title="Merge projects?" footer=true footerButtonContent="Merge"}}
+        <input type="hidden" class="parentId">
+        <input type="hidden" class="childId">
+        <input type="hidden" class="parentName">
+        <input type="hidden" class="childName">
+
+        Do you really want to merge
+        <span class="projectName childName"></span>
+        into
+        <span class="projectName parentName"></span>
+        ?
+    {{/Modal}}
+</template>
