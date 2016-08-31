@@ -1,5 +1,28 @@
 <template name="IconButton">
-    <button type="{{firstOf buttonType 'button'}}" id="{{id}}" class="btn btn-{{firstOf buttonKind 'primary'}} {{classes}}" data-created-at={{createdAt}} data-toggle="{{dataToggle}}" data-target="{{dataTarget}}">
-        <span class="glyphicon glyphicon-{{icon}}"></span> {{label}}
-    </button>
+    {{#unless disabled}}
+        <button
+            type="{{firstOf buttonType 'button'}}"
+            id="{{id}}"
+            class="btn btn-{{firstOf buttonKind 'primary'}} {{classes}}"
+            title="{{label}}"
+            data-created-at={{createdAt}}
+            data-toggle="{{dataToggle}}"
+            data-target="{{dataTarget}}">
+                <span class="glyphicon glyphicon-{{icon}}"></span>
+                {{label}}
+        </button>
+    {{else}}
+        <button
+            type="{{firstOf buttonType 'button'}}"
+            id="{{id}}"
+            class="btn btn-{{firstOf buttonKind 'primary'}} {{classes}}"
+            title="{{label}}"
+            data-created-at={{createdAt}}
+            data-toggle="{{dataToggle}}"
+            data-target="{{dataTarget}}"
+            disabled>
+                <span class="glyphicon glyphicon-{{icon}}"></span>
+                {{label}}
+        </button>
+    {{/unless}}
 </template>

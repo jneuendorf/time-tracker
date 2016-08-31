@@ -7,6 +7,7 @@ Template.Project.onCreated(function() {
     this.currentValue = 0;
     this.clockValue = 0;
     this.projectId = FlowRouter.getParam("id");
+    this.entriesView = new ReactiveVar("table");
 });
 
 let formatTime = (value) => {
@@ -26,6 +27,9 @@ Template.Project.helpers({
     },
     initialTime: function() {
         return initialTime();
+    },
+    view: function() {
+        return Template.instance().entriesView.get();
     }
 });
 
@@ -40,10 +44,21 @@ Template.Project.events({
             event.stopPropagation();
         }
     },
+    // TOGGLE CHART / TABLE
+    "click #toggleEntriesView": function(event, template) {
+        // show chart
+        if (template.entriesView.get() === "table") {
+            template.entriesView.set("chart");
+        }
+        // show table
+        else {
+            template.entriesView.set("table");
+        }
+    },
     // STOPWATCH BEHAVIOR
     "click #clock-save": function(event, template) {
         template.$("#clock-pause").click();
-        let val = template.$("#clock").val();
+        let val = template.$("#clock").text();
         let modal = $("#AddEntryModal");
         modal.find("input.duration").val(val);
         // auto fill in today's date according to datetimepicker's format
@@ -64,7 +79,7 @@ Template.Project.events({
         template.clockTimer = setInterval(() => {
             let seconds = (Date.now() - template.clockInitValue) / 1000;
             template.currentValue = seconds;
-            clock.val(formatTime(template.clockValue + seconds));
+            clock.text(formatTime(template.clockValue + seconds));
         }, 1000);
         template.$(".back").addClass("disabled");
         let resumeBtn = template.$("#clock-resume");
@@ -83,7 +98,7 @@ Template.Project.events({
     "click #clock-reset": function(event, template) {
         template.clockValue = 0;
         template.clockInitValue = Date.now();
-        template.$("#clock").val(initialTime());
+        template.$("#clock").text(initialTime());
         return true;
     }
 });

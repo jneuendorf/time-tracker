@@ -20,10 +20,6 @@
                 <div class="col-xs-6">
                     <h1 class="heading">
                         {{name}}
-                    </h1>
-                </div>
-                <div class="col-xs-3">
-                    <h1 class="mod">
                         <a href="/projects/{{_id}}/delete">
                             <button type="button" class="btn btn-danger btn-lg deleteProject">
                                 <span class="glyphicon glyphicon-trash"></span>
@@ -34,47 +30,52 @@
             </div>
             <!-- MODAL BUTTON + CLOCK STUFF -->
             <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-8">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#AddEntryModal">Add entries</button>
-                </div>
-                <div class="col-xs-12 col-sm-8 col-md-4 clockContainer">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="row">
-                                <div class="col-xs-8 col-xs-push-4">
-                                    <div class="input-group input-group-lg">
-                                          <input id="clock" type="text" class="form-control" value="{{initialTime}}">
-                                          <span class="input-group-btn">
-                                                <button class="btn btn-primary" type="button" id="clock-save" disabled>
-                                                    <span class="glyphicon glyphicon-ok-circle"></span> Save
-                                                </button>
-                                          </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default" id="clock-resume">
-                                    <input type="radio" name="timerState" autocomplete="off">
-                                    <span class="glyphicon glyphicon-play"></span>
-                                    <span>
-                                        Start
-                                    </span>
-                                </label>
-                                <label class="btn btn-default" id="clock-pause" disabled>
-                                    <input type="radio" name="timerState" autocomplete="off">
-                                    <span class="glyphicon glyphicon-pause"></span>
-                                    <span>
-                                        Pause
-                                    </span>
-                                </label>
-                                {{> IconButton icon="repeat" id="clock-reset" label="Reset timer"}}
-                            </div>
+                <div class="col-xs-12">
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-lg" role="group">
+                            {{> IconButton icon="plus-sign" label="Add entries" dataToggle="modal" dataTarget="#AddEntryModal"}}
+                        </div>
+                        <div class="separator">
+                            <h4>&nbsp;</h4>
+                        </div>
+                        <div class="btn-group btn-group-lg" data-toggle="buttons" role="group">
+                            <button id="clock" type="button" class="btn btn-default" disabled>{{initialTime}}</button>
+                            <label class="btn btn-default" id="clock-resume">
+                                <input type="radio" name="timerState" autocomplete="off">
+                                <span class="glyphicon glyphicon-play"></span>
+                                <span>
+                                    Start
+                                </span>
+                            </label>
+                            <label class="btn btn-default" id="clock-pause" disabled>
+                                <input type="radio" name="timerState" autocomplete="off">
+                                <span class="glyphicon glyphicon-pause"></span>
+                                <span>
+                                    Pause
+                                </span>
+                            </label>
+                            {{> IconButton icon="list-alt" id="clock-save" label="Save" disabled="disabled"}}
+                            {{> IconButton icon="repeat" id="clock-reset" label="Reset"}}
+                        </div>
+                        <div class="separator">
+                            <h4>&nbsp;</h4>
+                        </div>
+                        <div class="btn-group btn-group-lg" role="group">
+                            {{#if equals view "table"}}
+                                {{> IconButton icon="stats" id="toggleEntriesView" label="Show chart"}}
+                            {{else}}
+                                {{> IconButton icon="list-alt" id="toggleEntriesView" label="Show table"}}
+                            {{/if}}
                         </div>
                     </div>
+                    <hr>
                 </div>
             </div>
-            {{> EntriesTable project=project}}
+            {{#if equals view "table"}}
+                {{> EntriesTable project=project}}
+            {{else}}
+                {{> EntriesGraph}}
+            {{/if}}
         {{/with}}
         {{> AddEntryModal}}
     {{/unless}}

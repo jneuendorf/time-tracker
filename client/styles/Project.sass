@@ -1,13 +1,14 @@
 $bootstrap-blue: #337ab7
 $bootstrap-gray: #cccccc
+$bootstrap-line-gray: #eeeeee
 
 @keyframes pulse-blue
     70%
-        box-shadow: 0 0 0 4px $bootstrap-blue
+        // box-shadow: 0 0 0 4px $bootstrap-blue
         color: lighten($bootstrap-blue, 10%)
 
     100%
-        box-shadow: 0 0 0 0 $bootstrap-blue
+        // box-shadow: 0 0 0 0 $bootstrap-blue
         color: white
 @keyframes pulse-gray
     70%
@@ -30,39 +31,32 @@ h1.nav .back
         cursor: not-allowed
         opacity: 0.65
 
-h1.mod
-    text-align: right
+.deleteProject
+    margin-left: 10px
+
+.btn-toolbar
+    margin:
+        bottom: 20px
+        top: 10px
+    text-align: center
+
+    .btn-group.btn-group-lg
+        float: none
+    .separator
+        border-right: 1px solid $bootstrap-line-gray
+        display: inline-block
+        height: 100%
+        margin-right: 20px
+        position: relative
+        top: 3px
+        width: 25px
+
+// TIMER
+#clock-save.pulsing
+    animation: pulse-blue 1.5s infinite
+
+#clock-resume.pulsing
+    animation: pulse-gray 1.5s infinite
 
 .noEntries
     text-align: center
-
-// TIMER
-.clockContainer
-    text-align: right
-
-    #clock-save.pulsing
-        animation: pulse-blue 1.5s infinite
-
-    #clock-resume.pulsing
-        animation: pulse-gray 1.5s infinite
-
-// VIEW MODES
-.viewModes
-    text-align: center
-    padding:
-        bottom: 10px
-        top: 4px
-
-// ENTRIES
-.table
-    thead
-        .date
-            width: 110px
-        .duration
-            width: 95px
-        .buttons
-            width: 144px
-    .entry
-        .buttons
-            form
-                display: inline

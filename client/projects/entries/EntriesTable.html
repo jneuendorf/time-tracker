@@ -12,7 +12,7 @@
                             <span>{{name}}</span>
                         </label>
                     {{/each}}
-                    {{> IconButton icon="cloud-download" label="Export current" id="exportCsv"}}
+                    {{> IconButton icon="cloud-download" label="Export current" id="exportCsv" buttonKind="default"}}
                 </div>
             {{/if}}
         </div>
@@ -34,32 +34,6 @@
                         {{#let doc=this.project}}
                             {{#each entries}}
                                 {{> Entry project=doc entry=this}}
-                                <!-- <tr class="entry">
-                                    <td class="date">{{date}}</td>
-                                    <td class="duration">{{duration}}</td>
-                                    <td class="note">{{note}}</td>
-                                    <td class="buttons">
-                                        {{#let modalId=(concat "editEntry" index "Modal")}}
-                                            {{#Modal id=modalId title="Edit entry"}}
-                                                {{attachToThis index=index}}
-                                                {{#autoForm id=(concat "editEntry" index) type="update" collection="Projects" doc=doc setArrayItems=true}}
-                                                    {{> afFormGroup name=(concat "entries." this.index ".date")}}
-                                                    {{> afFormGroup name=(concat "entries." this.index ".duration")}}
-                                                    {{> afFormGroup name=(concat "entries." this.index ".note")}}
-                                                    {{> afSubmitBtn}}
-                                                {{/autoForm}}
-                                            {{/Modal}}
-                                            {{> IconButton icon="pencil" createdAt=createdAt classes="edit" dataToggle="modal" dataTarget=(concat "#" modalId)}}
-                                        {{/let}}
-                                        {{#autoForm id=(concat "duplicateEntry" index) type="update-pushArray" collection="Projects" doc=doc scope="entries"}}
-                                            {{> afFieldInput name="date" type="hidden" value=date}}
-                                            {{> afFieldInput name="duration" type="hidden" value=duration}}
-                                            {{> afFieldInput name="note" type="hidden" value=note}}
-                                            {{> IconButton icon="duplicate" buttonType="submit"}}
-                                        {{/autoForm}}
-                                        {{> IconButton buttonKind="danger" icon="trash" createdAt=createdAt classes="delete"}}
-                                    </td>
-                                </tr> -->
                             {{/each}}
                         {{/let}}
                     </tbody>
