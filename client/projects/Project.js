@@ -30,7 +30,10 @@ Template.Project.helpers({
     },
     view: function() {
         return Template.instance().entriesView.get();
-    }
+    },
+    viewModes: function() {
+        return ["all", "today", "weekly", "monthly", "annually"];
+    },
 });
 
 Template.Project.events({

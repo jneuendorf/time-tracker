@@ -31,10 +31,53 @@ global.parseDate = function(dateString) {
     return moment(dateString, global.dateFormat);
 }
 
+global.filterBy = (entries, kind) => {
+    let refValue = moment()[kind]();
+    // console.log(kind + "ly", refValue);
+    return entries.filter((entry) => {
+        return global.parseDate(entry.date)[kind]() === refValue;
+    });
+};
+
+global.filterEntriesByViewMode = (entries, viewMode) => {
+    switch (viewMode) {
+        case "all":
+            break;
+        case "today":
+            let todayStr = global.formatDate(new Date());
+            entries = entries.filter((entry) => {
+                return entry.date === todayStr;
+            });
+            break;
+        case "weekly":
+            entries = global.filterBy(entries, "week");
+            break;
+        case "monthly":
+            entries = global.filterBy(entries, "month");
+            break;
+        case "annually":
+            entries = global.filterBy(entries, "year");
+            break;
+
+    }
+    return entries.sort((a, b) => {
+        a = global.parseDate(a.date);
+        b = global.parseDate(b.date);
+        if (a.isBefore(b)) {
+            return -1;
+        }
+        if (a.isAfter(b)) {
+            return 1;
+        }
+        return 0;
+    });
+};
+
 
 // GLOBAL VARIABLES
 
 global.dateFormat = "DD.MM.YY";
+global.timeFormat = "HH:mm:ss";
 
 global.TemplateHooks = {
     // initDatetimepicker in AddEntryModal

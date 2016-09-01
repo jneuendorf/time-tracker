@@ -10,7 +10,7 @@ let initDatetimepicker = function(container) {
         format: global.dateFormat
     }).focus();
     $find(".duration", container).datetimepicker({
-        format: "HH:mm:ss",
+        format: global.timeFormat,
         // stepping: 5
         keyBinds: {
             up: function(widget) {

@@ -7,13 +7,13 @@ Template.EntriesTable.onCreated(function() {
     this.entries = [];
 });
 
-let filterBy = (entries, kind) => {
-    let refValue = moment()[kind]();
-    // console.log(kind + "ly", refValue);
-    return entries.filter((entry) => {
-        return global.parseDate(entry.date)[kind]() === refValue;
-    });
-};
+// let filterBy = (entries, kind) => {
+//     let refValue = moment()[kind]();
+//     // console.log(kind + "ly", refValue);
+//     return entries.filter((entry) => {
+//         return global.parseDate(entry.date)[kind]() === refValue;
+//     });
+// };
 
 let csvStringifyArray = (array, delimiter) => {
     return array.map((item) => {
@@ -65,37 +65,7 @@ Template.EntriesTable.helpers({
             return entry;
         });
         let viewMode = template.viewMode.get();
-        switch (viewMode) {
-            case "all":
-                break;
-            case "today":
-                let todayStr = global.formatDate(new Date());
-                entries = entries.filter((entry) => {
-                    return entry.date === todayStr;
-                });
-                break;
-            case "weekly":
-                entries = filterBy(entries, "week");
-                break;
-            case "monthly":
-                entries = filterBy(entries, "month");
-                break;
-            case "annually":
-                entries = filterBy(entries, "year");
-                break;
-
-        }
-        entries = entries.sort((a, b) => {
-            a = global.parseDate(a.date);
-            b = global.parseDate(b.date);
-            if (a.isBefore(b)) {
-                return -1;
-            }
-            if (a.isAfter(b)) {
-                return 1;
-            }
-            return 0;
-        });
+        entries = global.filterEntriesByViewMode(entries, viewMode);
         template.entries = entries;
         return entries;
     },
