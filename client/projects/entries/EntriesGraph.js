@@ -39,15 +39,6 @@ Template.EntriesGraph.onRendered(function() {
                     }
                 }
             }
-        },
-        tooltip: {
-            // grouped: false
         }
     });
-
-    // this.autorun(function(tracker) {
-    //     chart.load({
-    //         columns: data
-    //     });
-    // });
 });
