@@ -31,32 +31,32 @@ global.parseDate = function(dateString) {
     return moment(dateString, global.dateFormat);
 }
 
-global.filterBy = (entries, kind) => {
-    let refValue = moment()[kind]();
-    // console.log(kind + "ly", refValue);
+global.filterBy = (entries, kind, refDate) => {
+    let refValue = moment(refDate)[kind]();
+    console.log(kind + "ly", refValue);
     return entries.filter((entry) => {
         return global.parseDate(entry.date)[kind]() === refValue;
     });
 };
 
-global.filterEntriesByViewMode = (entries, viewMode) => {
+global.filterEntriesByViewMode = (entries, viewMode, refDate=moment()) => {
     switch (viewMode) {
         case "all":
             break;
         case "today":
-            let todayStr = global.formatDate(new Date());
+            let todayStr = global.formatDate(refDate);
             entries = entries.filter((entry) => {
                 return entry.date === todayStr;
             });
             break;
         case "weekly":
-            entries = global.filterBy(entries, "week");
+            entries = global.filterBy(entries, "week", refDate);
             break;
         case "monthly":
-            entries = global.filterBy(entries, "month");
+            entries = global.filterBy(entries, "month", refDate);
             break;
         case "annually":
-            entries = global.filterBy(entries, "year");
+            entries = global.filterBy(entries, "year", refDate);
             break;
 
     }

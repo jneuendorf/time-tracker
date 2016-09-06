@@ -1,8 +1,9 @@
 <template name="EntriesTable">
-    <!-- {{#let enties=getEntries}}{{/let}} -->
+    <!-- {{> IconButton id="slickPrev" icon="chevron-left" classes="test hidden"}}
+    {{> IconButton id="slickNext" icon="chevron-right" classes="test hidden"}} -->
     <!-- VIEW MODES -->
     <div class="row">
-        <div class="col-xs-8 col-xs-push-2 viewModes">
+        <div class="viewModes col-xs-8 col-xs-push-2">
             {{#if or entries.length (not (equals viewMode "all"))}}
                 <div class="btn-group" data-toggle="buttons">
                     {{#each viewModes}}
@@ -15,6 +16,16 @@
                     {{> IconButton icon="cloud-download" label="Export current" id="exportCsv" buttonKind="default"}}
                 </div>
             {{/if}}
+        </div>
+    </div>
+    <!-- TIME INTERVAL SLIDER -->
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-sm-push-3 col-md-4 col-md-push-4 col-lg-2 col-lg-push-5">
+            <div class="timeIntervals">
+                {{#each timeIntervals}}
+                    {{> TimeInterval}}
+                {{/each}}
+            </div>
         </div>
     </div>
     <!-- ENTRIES TABLE -->

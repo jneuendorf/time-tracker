@@ -1,0 +1,33 @@
+$slick-opacity-default: 0.75
+$slick-opacity-on-hover: 1
+$slick-opacity-not-active: 0.25
+
+.slick-slider
+    margin-bottom: 0
+
+// Arrows
+.slickPrev, .slickNext
+    position: absolute
+    display: block
+    cursor: pointer
+    top: 50%
+    transform: translate(0, -50%)
+    padding: 0
+    opacity: $slick-opacity-default
+
+    &:hover, &:focus
+        opacity: $slick-opacity-on-hover
+
+    &.slick-disabled
+        opacity: $slick-opacity-not-active
+
+.slickPrev
+    left: -25px
+
+.slickNext
+    right: -25px
+
+// Slides
+.slick-slide
+    &:focus
+        outline: none

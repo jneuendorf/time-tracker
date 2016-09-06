@@ -44,3 +44,7 @@ Template.registerHelper("attachToThis", function(kwargs) {
     }
     return "";
 });
+
+Template.registerHelper("jQuery", function(str) {
+    return $(str);
+});
