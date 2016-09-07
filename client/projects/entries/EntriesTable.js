@@ -5,8 +5,10 @@ Template.EntriesTable.onCreated(function() {
     this.viewMode = new ReactiveVar("all");
     this.viewModeOffset = new ReactiveVar(0);
     let earliestEntryDate = null;
+    // TODO: make this reactive (when addeding entries)
     this.allEntries = this.data.project.entries.map((entry, index) => {
         entry.index = index;
+        entry.durationFormatted = moment.duration(entry.duration, "seconds").format(global.timeFormat, {trim: false});
         let date = global.parseDate(entry.date);
         if (!earliestEntryDate || date.isBefore(earliestEntryDate)) {
             earliestEntryDate = date;

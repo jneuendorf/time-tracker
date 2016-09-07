@@ -25,12 +25,11 @@ Entry = new SimpleSchema({
         autoform: {
             afFieldInput: {
                 class: "date",
-                // type: "bootstrap-datetimepicker"
             }
         }
     },
     duration: {
-        type: String,
+        type: Number,
         autoform: {
             afFieldInput: {
                 class: "duration"

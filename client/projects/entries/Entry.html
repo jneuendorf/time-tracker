@@ -3,7 +3,7 @@
         {{#let project=this.project}}
             {{#with this.entry}}
                 <td class="date">{{date}}</td>
-                <td class="duration">{{duration}}</td>
+                <td class="duration">{{durationFormatted}}</td>
                 <td class="note">{{note}}</td>
                 <td class="buttons">
                     {{#let modalId=(concat "editEntry" index "Modal")}}

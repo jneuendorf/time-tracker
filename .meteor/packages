@@ -32,9 +32,10 @@ meteortoys:allthings
 momentjs:moment
 numeral:numeral
 peernohell:c3
+pfafman:filesaver
 # https://themeteorchef.com/snippets/reactive-dict-reactive-vars-and-session-variables/#tmc-reactive-dictionary
 reactive-dict@1.1.8
 themeteorchef:bert
 tsega:bootstrap3-datetimepicker
-pfafman:filesaver
 udondan:slick
+oaf:moment-duration-format

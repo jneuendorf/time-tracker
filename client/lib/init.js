@@ -31,9 +31,17 @@ global.parseDate = function(dateString) {
     return moment(dateString, global.dateFormat);
 }
 
+global.parseTime = function(timeString) {
+    let date = moment(timeString, global.timeFormat);
+    date.set("year", 1970);
+    date.set("month", 0);
+    date.set("date", 1);
+    return moment.duration(date.diff(moment("1970-01-01")));
+};
+
 global.filterBy = (entries, kind, refDate) => {
     let refValue = moment(refDate)[kind]();
-    console.log(kind + "ly", refValue);
+    // console.log(kind + "ly", refValue);
     return entries.filter((entry) => {
         return global.parseDate(entry.date)[kind]() === refValue;
     });
@@ -80,9 +88,10 @@ global.dateFormat = "DD.MM.YY";
 global.timeFormat = "HH:mm:ss";
 
 global.TemplateHooks = {
-    // initDatetimepicker in AddEntryModal
+    // initDatetimepickerAndSubmit in AddEntryModal
 };
 
 global.temporaryCallbacks = {
+    // set in Template.Project.events "click #clock-save"
     AddEntryModalShown: function(modal) {}
 };
