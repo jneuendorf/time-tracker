@@ -31,7 +31,7 @@
     <!-- ENTRIES TABLE -->
     <div class="row">
         <div class="col-xs-8 col-xs-push-2">
-            {{#if entries}}
+            {{#if entries "table - if"}}
                 <table class="entries table table-striped table-hover">
                     <thead>
                         <tr>
@@ -42,8 +42,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{#let doc=this.project}}
-                            {{#each entries}}
+                        {{#let doc=project}}
+                            {{#each entries "table - each"}}
                                 {{> Entry project=doc entry=this}}
                             {{/each}}
                         {{/let}}

@@ -2,22 +2,29 @@ Template.EntriesTable.onCreated(function() {
     this.autorun(() => {
         this.subscribe("projects");
     });
+    this.projectCursor = Projects.find({
+        _id: FlowRouter.getParam("id")
+    });
+    // convenience property for accessing the project data but always having the latest (reactive) data
+    Object.defineProperty(this, "project", {
+        get: function() {
+            return this.projectCursor.fetch()[0];
+        },
+        set: function() {
+            throw new Error("Can't set project");
+        }
+    });
     this.viewMode = new ReactiveVar("all");
     this.viewModeOffset = new ReactiveVar(0);
-    let earliestEntryDate = null;
-    // TODO: make this reactive (when addeding entries)
-    this.allEntries = this.data.project.entries.map((entry, index) => {
-        entry.index = index;
-        entry.durationFormatted = moment.duration(entry.duration, "seconds").format(global.timeFormat, {trim: false});
-        let date = global.parseDate(entry.date);
-        if (!earliestEntryDate || date.isBefore(earliestEntryDate)) {
-            earliestEntryDate = date;
+    this.earliestEntryDate = this.project.entries.reduce((prev, current) => {
+        current = global.parseDate(current.date);
+        if (current.isBefore(prev)) {
+            return current;
         }
-        return entry;
-    });
-    this.earliestEntryDate = earliestEntryDate;
+        return prev;
+    }, moment());
     // entries are updated when calling entries helper
-    this.entries = [];
+    this.filteredEntries = [];
 });
 
 const VIEW_MODES = ["all", "today", "weekly", "monthly", "annually"];
@@ -33,14 +40,6 @@ const MOMENT_FORMATS_BY_VIEW_MODE = {
     monthly: "MMMM",
     annually: "YYYY"
 };
-
-// let filterBy = (entries, kind) => {
-//     let refValue = moment()[kind]();
-//     // console.log(kind + "ly", refValue);
-//     return entries.filter((entry) => {
-//         return global.parseDate(entry.date)[kind]() === refValue;
-//     });
-// };
 
 let csvStringifyArray = (array, delimiter) => {
     return array.map((item) => {
@@ -123,14 +122,30 @@ let reslick = function(template, timeIntervals) {
 
 
 Template.EntriesTable.helpers({
+    project: function() {
+        console.log("EntriesTable: project helper");
+        return Template.instance().project;
+    },
     entries: function() {
+        console.log("calling entries()...", arguments);
         let template = Template.instance();
         let viewMode = template.viewMode.get();
         let offset = template.viewModeOffset.get();
         let refDate = moment().add(offset, UNITS_BY_VIEW_MODE[viewMode]);
-        let entries = global.filterEntriesByViewMode(template.allEntries, viewMode, refDate);
-        template.entries = entries;
-        return entries;
+        let filteredEntries = global.filterEntriesByViewMode(
+            template.project.entries.map((entry, index) => {
+                entry.index = index;
+                entry.durationFormatted = moment
+                    .duration(entry.duration, "seconds")
+                    .format(global.timeFormat, {trim: false});
+                return entry;
+            }),
+            viewMode,
+            refDate
+        );
+        template.filteredEntries = filteredEntries;
+        console.log("filteredEntries =", filteredEntries);
+        return filteredEntries;
     },
     viewModes: function() {
         let currentViewMode = Template.instance().viewMode.get();
@@ -184,9 +199,9 @@ Template.EntriesTable.events({
     },
     "click #exportCsv": function(event, template) {
         let viewMode = template.viewMode.get();
-        let filename = template.data.project.name + "-" + viewMode + ".csv";
+        let filename = template.project.name + "-" + viewMode + ".csv";
         // TODO: get delimiter from settings
-        let blob = new Blob([csvStringifyEntries(template.entries, ",")], {type: "text/plain;charset=utf-8"});
+        let blob = new Blob([csvStringifyEntries(template.filteredEntries, ",")], {type: "text/plain;charset=utf-8"});
         saveAs(blob, filename);
     }
 });

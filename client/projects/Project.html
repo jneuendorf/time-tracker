@@ -72,7 +72,7 @@
                 </div>
             </div>
             {{#if equals view "table"}}
-                {{> EntriesTable project=project viewModes=viewModes}}
+                {{> EntriesTable viewModes=viewModes}}
             {{else}}
                 {{> EntriesGraph project=project viewModes=viewModes}}
             {{/if}}
