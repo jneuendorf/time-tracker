@@ -72,10 +72,12 @@ let csvStringifyEntries = (entries, delimiter) => {
     if (!delimiter) {
         delimiter = ",";
     }
-    let excludeKeys = ["createdAt", "index"];
+    let excludeKeys = ["createdAt", "index", "durationFormatted"];
     let header = csvStringifyArray(
         Object.keys(entries[0]).filter((key) => {
             return excludeKeys.indexOf(key) < 0;
+        }).map((key) => {
+            return key[0].toUpperCase() + key.slice(1);
         }),
         delimiter)
     return header + "\n" + entries.map((entry) => {
@@ -124,11 +126,9 @@ let reslick = function(template, timeIntervals) {
 
 Template.EntriesTable.helpers({
     project: function() {
-        console.log("EntriesTable: project helper");
         return Template.instance().project;
     },
     entries: function() {
-        console.log("calling entries()...", arguments);
         let template = Template.instance();
         let viewMode = template.viewMode.get();
         let offset = template.viewModeOffset.get();
@@ -145,7 +145,6 @@ Template.EntriesTable.helpers({
             refDate
         );
         template.filteredEntries = filteredEntries;
-        console.log("filteredEntries =", filteredEntries);
         return filteredEntries;
     },
     viewModes: function() {
@@ -166,7 +165,6 @@ Template.EntriesTable.helpers({
         let template = Template.instance();
         let viewMode = template.viewMode.get();
         if (viewMode !== "all") {
-            console.log("calling timeIntervals");
             let unit = UNITS_BY_VIEW_MODE[viewMode].slice(0, -1);
             let earliestEntryDate = template.earliestEntryDate.clone().startOf(unit);
             let date = moment();
@@ -202,7 +200,10 @@ Template.EntriesTable.events({
         let viewMode = template.viewMode.get();
         let filename = template.project.name + "-" + viewMode + ".csv";
         // TODO: get delimiter from settings
-        let blob = new Blob([csvStringifyEntries(template.filteredEntries, ",")], {type: "text/plain;charset=utf-8"});
+        let delimiter = ",";
+        let blob = new Blob([csvStringifyEntries(template.filteredEntries, delimiter)],
+            {type: "text/plain;charset=utf-8"}
+        );
         saveAs(blob, filename);
     }
 });

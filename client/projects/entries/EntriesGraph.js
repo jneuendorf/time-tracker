@@ -14,16 +14,17 @@ Template.EntriesGraph.onRendered(function() {
 
     for (let i = 0; i < viewModes.length; i++) {
         aggregated = global.filterEntriesByViewMode(entries, viewModes[i]).map((entry) => {
-            return moment(entry.duration, global.timeFormat).unix();
+            return entry.duration;
         }).reduce((prev, current) => {
             return prev + current;
         }, 0);
 
         data.push(
             [LABELS_BY_VIEW_MODE[viewModes[i]]].concat(
+                // for linear y axis
+                // aggregated
                 // for logarithmic y axis
-                // aggregated !== 0 ? Math.log(aggregated) / Math.LN10 : 0
-                aggregated
+                aggregated !== 0 ? Math.log(aggregated) / Math.LN10 : 0
             )
         );
     }
@@ -44,13 +45,11 @@ Template.EntriesGraph.onRendered(function() {
             },
             y: {
                 tick: {
-                    format: function(timestamp) {
-                        if (timestamp === 0) {
-                            return "0h 0min";
-                        }
-                        return moment.unix(timestamp).format("D[d] H[h] mm[min]");
+                    format: function(seconds) {
+                        // for linear y axis
+                        // return moment.duration(seconds, "seconds").format("D[d] H[h] mm[min]");
                         // for logarithmic y axis
-                        // return moment.unix(Math.pow(10, timestamp)).format("D[d] H[h] mm[min]");
+                        return moment.duration(Math.ceil(Math.pow(10, seconds)), "seconds").format("D[d] H[h] mm[min]");
                     }
                 }
             }
