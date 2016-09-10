@@ -1,12 +1,14 @@
 Template.Project.onCreated(function() {
+    let projectId = FlowRouter.getParam("id");
     this.autorun(() => {
-        this.subscribe("projects");
+        // this.subscribe("projects");
+        this.subscribe("project", projectId);
     });
     this.clockTimer = null;
     this.clockInitValue = null;
     this.currentValue = 0;
     this.clockValue = 0;
-    this.projectId = FlowRouter.getParam("id");
+    this.projectId = projectId;
     this.entriesView = new ReactiveVar("table");
 });
 

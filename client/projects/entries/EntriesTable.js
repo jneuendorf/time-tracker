@@ -1,9 +1,10 @@
 Template.EntriesTable.onCreated(function() {
+    let projectId = FlowRouter.getParam("id");
     this.autorun(() => {
-        this.subscribe("projects");
+        this.subscribe("project", projectId);
     });
     this.projectCursor = Projects.find({
-        _id: FlowRouter.getParam("id")
+        _id: projectId
     });
     // convenience property for accessing the project data but always having the latest (reactive) data
     Object.defineProperty(this, "project", {
