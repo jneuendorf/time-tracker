@@ -42,11 +42,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{#let doc=project}}
-                            {{#each entries "table - each"}}
-                                {{> Entry project=doc entry=this}}
-                            {{/each}}
-                        {{/let}}
+                        {{#each entries "table - each"}}
+                            {{> Entry}}
+                        {{/each}}
                     </tbody>
                 </table>
             {{else}}

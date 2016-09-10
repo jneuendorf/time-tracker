@@ -1,6 +1,3 @@
-// // Meteor.subscribe("projects");
-
-
 // TEMPLATE HELPERS (accessible in all templates)
 Template.registerHelper("firstOf", function() {
     let i = 0;

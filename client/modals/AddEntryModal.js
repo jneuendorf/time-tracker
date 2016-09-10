@@ -1,8 +1,10 @@
 Template.AddEntryModal.onCreated(function() {
     console.log("creating AddEntryModal");
+    let projectId = FlowRouter.getParam("id");
     this.autorun(() => {
-        this.subscribe("projects");
+        this.subscribe("project", projectId);
     });
+    this.projectId = projectId;
 });
 
 let onSubmit = function(event, durationElem) {
@@ -47,10 +49,10 @@ Template.AddEntryModal.onRendered(function() {
 });
 
 Template.AddEntryModal.helpers({
-    project: () => {
-        let id = FlowRouter.getParam("id");
-        return Projects.findOne({
-            _id: id
+    project: function() {
+        let project = Projects.findOne({
+            _id: Template.instance().projectId
         });
+        return project;
     }
 });
