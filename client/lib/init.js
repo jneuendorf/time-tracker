@@ -6,7 +6,7 @@ global.goHome = function(params) {
     }
     else {
         let parts = [];
-        for (var key in params) {
+        for (let key in params) {
             if (params.hasOwnProperty(key)) {
                 parts.push(key + "=" + params[key]);
             }
@@ -29,7 +29,7 @@ global.formatDate = function(date) {
 
 global.parseDate = function(dateString) {
     return moment(dateString, global.dateFormat);
-}
+};
 
 global.parseTime = function(timeString) {
     let date = moment(timeString, global.timeFormat);
@@ -79,6 +79,16 @@ global.filterEntriesByViewMode = (entries, viewMode, refDate=moment()) => {
         }
         return 0;
     });
+};
+
+global.activeTooltips = function(template) {
+    setTimeout(() => {
+        console.log("activating tooltips");
+        template.$("[data-toggle='tooltip']")
+            .not(".has-tooltip")
+            .tooltip()
+            .addClass("has-tooltip");
+    }, 200);
 };
 
 

@@ -18,7 +18,7 @@
                     </h1>
                 </div>
                 <div class="col-xs-6">
-                    <h1 class="heading">
+                    <h1 class="centered projectName" data-toggle="tooltip" data-placement="bottom" title="{{description}}">
                         {{name}}
                         <a href="/projects/{{_id}}/delete">
                             <button type="button" class="btn btn-danger btn-lg deleteProject">
@@ -26,11 +26,13 @@
                             </button>
                         </a>
                     </h1>
+                    <!-- <h3 class="centered description">{{{nl2br description}}}</h3> -->
                 </div>
             </div>
             <!-- MODAL BUTTON + CLOCK STUFF -->
             <div class="row">
                 <div class="col-xs-12">
+                    <hr>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-lg" role="group">
                             {{> IconButton icon="plus-sign" label="Add entries" dataToggle="modal" dataTarget="#AddEntryModal"}}

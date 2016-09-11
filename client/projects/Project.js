@@ -1,8 +1,8 @@
 Template.Project.onCreated(function() {
     let projectId = FlowRouter.getParam("id");
     this.autorun(() => {
-        // this.subscribe("projects");
         this.subscribe("project", projectId);
+        global.activeTooltips(this);
     });
     this.clockTimer = null;
     this.clockInitValue = null;
@@ -12,13 +12,14 @@ Template.Project.onCreated(function() {
     this.entriesView = new ReactiveVar("table");
 });
 
+
 let formatTime = (value) => {
     return numeral(value).format("00:00:00").replace(/^(\d)\:/, "0$1:");
-}
+};
 
 let initialTime = () => {
     return formatTime(0);
-}
+};
 
 Template.Project.helpers({
     project: function() {
@@ -75,7 +76,6 @@ Template.Project.events({
         modal.modal("show");
     },
     "click #clock-resume": function(event, template) {
-        let clockValue = template.clockValue;
         let clock = template.$("#clock");
         // setting disabled with jquery .prop does not work on label elements
         template.$("#clock-pause").attr("disabled", null);

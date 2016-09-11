@@ -41,7 +41,8 @@ Entry = new SimpleSchema({
         optional: true,
         autoform: {
             afFieldInput: {
-                class: "note"
+                class: "note",
+                type: "textarea"
             }
         }
     }
@@ -54,7 +55,12 @@ ProjectSchema = new SimpleSchema({
     },
     description: {
         type: String,
-        label: "Description"
+        label: "Description",
+        autoform: {
+            afFieldInput: {
+                type: "textarea"
+            }
+        }
     },
     entries: {
         type: [Entry],

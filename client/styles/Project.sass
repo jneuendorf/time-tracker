@@ -1,18 +1,19 @@
-$bootstrap-blue: #337ab7
-$bootstrap-gray: #cccccc
-$bootstrap-line-gray: #eeeeee
+$bs-font-color: #333333
+$bs-blue: #337ab7
+$bs-gray: #cccccc
+$bs-line-gray: #eeeeee
 
 @keyframes pulse-blue
     70%
-        // box-shadow: 0 0 0 4px $bootstrap-blue
-        color: lighten($bootstrap-blue, 10%)
+        // box-shadow: 0 0 0 4px $bs-blue
+        color: lighten($bs-blue, 10%)
 
     100%
-        // box-shadow: 0 0 0 0 $bootstrap-blue
+        // box-shadow: 0 0 0 0 $bs-blue
         color: white
 @keyframes pulse-gray
     70%
-        background-color: $bootstrap-gray
+        background-color: $bs-gray
 
     100%
         background-color: white
@@ -23,7 +24,7 @@ h1.nav .back
     &:hover
         text-decoration: none
     &:focus
-        color: $bootstrap-blue
+        color: $bs-blue
         outline: none
         text-decoration: none
 
@@ -43,7 +44,7 @@ h1.nav .back
     .btn-group.btn-group-lg
         float: none
     .separator
-        border-right: 1px solid $bootstrap-line-gray
+        border-right: 1px solid $bs-line-gray
         display: inline-block
         height: 100%
         margin-right: 20px
@@ -57,6 +58,3 @@ h1.nav .back
 
 #clock-resume.pulsing
     animation: pulse-gray 1.5s infinite
-
-.noEntries
-    text-align: center

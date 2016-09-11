@@ -1,4 +1,4 @@
-Template.HomeLayout.onCreated(() => {
+Template.HomeLayout.onCreated(function() {
     if (FlowRouter.getQueryParam("showDeleted") === "true") {
         Bert.alert({
             title: "Done",
