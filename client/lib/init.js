@@ -23,8 +23,27 @@ global.$find = function(selector, context) {
     return $(context.find(selector));
 };
 
+global.groupBy = function(arr, getProp) {
+    let elem, grouped, key, l, len;
+    grouped = {};
+    for (l = 0, len = arr.length; l < len; l++) {
+        elem = arr[l];
+        if (getProp instanceof Function) {
+            key = getProp(elem);
+        }
+        else {
+            key = elem;
+        }
+        if (!grouped[key]) {
+            grouped[key] = [];
+        }
+        grouped[key].push(elem);
+    }
+    return grouped;
+};
+
 global.formatDate = function(date) {
-    return moment(date).format("DD.MM.YY");
+    return moment(date).format(global.dateFormat);
 };
 
 global.parseDate = function(dateString) {
