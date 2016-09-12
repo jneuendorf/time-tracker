@@ -201,7 +201,8 @@ Template.EntriesGraphs.events({
     "mouseleave .c3": function(event, template) {
         template.$(".btn.download").fadeOut(50);
     },
-    "click .btn.download": function() {
-        
+    "click .btn.download": function(event, template) {
+        let btn = template.$(event.currentTarget);
+        exportSvg(btn.closest(".c3").attr("id"), template.$("#exportHelper"));
     }
 });

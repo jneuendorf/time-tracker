@@ -1,6 +1,6 @@
 // http://stackoverflow.com/questions/37701361/exporting-c3-js-line-charts-to-png-images-does-not-work
-let exportSvg = function(chartId, img) {
-    let svg = $(chartId).find("svg").get(0);
+global.exportSvg = function(chartId, img) {
+    let svg = $("#" + chartId).find("svg").get(0);
 
     let nodeList = svg.querySelectorAll(".c3-chart path");
     let nodeList2 = svg.querySelectorAll(".c3-axis path");
@@ -20,12 +20,13 @@ let exportSvg = function(chartId, img) {
     // let img = document.getElementById("fromcanvas");
     svg.toDataURL("image/png", {
         callback: function(dataUrl) {
+            console.log(dataUrl, img);
             img.src = dataUrl;
             img.onload = function() {
                 console.log(this.src);
                 // save
             };
         },
-        renderer: "native"
+        renderer: "canvg"
     });
-}
+};

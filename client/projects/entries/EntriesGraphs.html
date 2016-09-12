@@ -3,10 +3,11 @@
         All data
         <span class="badge">{{numberOfEntries}}</span>
     </h2>
-    <div class="aggregatedChart"></div>
+    <div id="aggregatedChart" class="aggregatedChart"></div>
     <h2>
         Trending
     </h2>
-    <div class="trendingChart"></div>
+    <div id="trendingChart" class="trendingChart"></div>
     {{> IconButton icon="cloud-download" label="Download as PNG" classes="download"}}
+    <img id="exportHelper" src="" />
 </template>

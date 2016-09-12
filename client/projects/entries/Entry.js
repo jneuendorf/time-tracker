@@ -12,6 +12,9 @@ Template.Entry.helpers({
             _id: Template.instance().projectId
         });
         return project;
+    },
+    dayOfWeek: function() {
+        return parseDate(Template.instance().data.date).format("dd");
     }
 });
 

@@ -1,6 +1,11 @@
 <template name="Entry">
     <tr class="entry">
-        <td class="date">{{date}}</td>
+        <td class="date">
+            {{date}}
+            <span class="dayOfWeek">
+                ({{dayOfWeek}})
+            </span>
+        </td>
         <td class="duration">{{durationFormatted}}</td>
         <td class="note">{{note}}</td>
         <td class="buttons">
