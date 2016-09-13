@@ -76,7 +76,7 @@
             {{#if equals view "table"}}
                 {{> EntriesTable viewModes=viewModes}}
             {{else}}
-                {{> EntriesGraphs project=project viewModes=viewModes}}
+                {{> EntriesGraphs viewModes=viewModes}}
             {{/if}}
         {{/with}}
         {{> AddEntryModal}}

@@ -19,14 +19,6 @@ const UNITS_BY_VIEW_MODE = {
     annually: "years"
 };
 
-const log10 = function(datum) {
-    return datum !== 0 ? (Math.log(datum) / Math.LN10) : 0;
-};
-
-const exp10 = function(datum) {
-    return Math.ceil(Math.pow(10, datum));
-};
-
 const addDurations = function(entries) {
     return entries.map((entry) => {
         return entry.duration;
@@ -67,29 +59,14 @@ const GRAPH_CONFIG = {
                     // for linear y axis
                     // return moment.duration(seconds, "seconds").format("D[d] H[h] mm[min]");
                     // for logarithmic y axis
-                    return moment.duration(exp10(seconds), "seconds").format("D[d] H[h] mm[min]");
+                    return moment.duration(global.exp10(seconds), "seconds").format("D[d] H[h] mm[min]");
                 }
             }
         }
     }
 };
 
-Template.EntriesGraphs.onCreated(function() {
-    this.entries = this.data.project.entries.sort((a, b) => {
-        a = global.parseDate(a.date);
-        b = global.parseDate(b.date);
-        if (a.isBefore(b)) {
-            return -1;
-        }
-        if (a.isAfter(b)) {
-            return 1;
-        }
-        return 0;
-    });
-    this.viewModes = this.data.viewModes;
-});
-
-Template.EntriesGraphs.onRendered(function() {
+const loadGraphData = function() {
     let entries = this.entries;
     let viewModes = this.viewModes;
     let viewMode;
@@ -110,10 +87,9 @@ Template.EntriesGraphs.onRendered(function() {
                 // for linear y axis
                 // aggregated
                 // for logarithmic y axis
-                log10(aggregated)
+                global.log10(aggregated)
             )
         );
-
         // prepare data for trending data
         if (viewMode !== "all") {
             let label = TREND_LABELS_BY_VIEW_MODE[viewMode];
@@ -124,13 +100,9 @@ Template.EntriesGraphs.onRendered(function() {
             };
         }
     }
-    c3.generate($.extend(true, {}, GRAPH_CONFIG, {
-        bindto: this.find(".aggregatedChart"),
-        data: {
-            columns: aggregatedData,
-            type: "bar"
-        }
-    }));
+    this.aggregatedChart.load({
+        columns: aggregatedData
+    });
 
     /////////////////////////////////////////////////////////////////
     // TRENDING CHART
@@ -150,11 +122,86 @@ Template.EntriesGraphs.onRendered(function() {
                 })
             ));
             trendingData[viewMode].y.push(
-                log10(addDurations(groupedEntries[date]))
+                global.log10(addDurations(groupedEntries[date]))
             );
         }
     }
-    c3.generate($.extend(true, {}, GRAPH_CONFIG, {
+    this.trendingChart.load({
+        columns: (function() {
+            let result = [];
+            for (let viewMode in trendingData) {
+                result.push(trendingData[viewMode].x, trendingData[viewMode].y);
+            }
+            return result;
+        }())
+    });
+};
+
+
+
+Template.EntriesGraphs.onCreated(function() {
+    let projectId = FlowRouter.getParam("id");
+    this.autorun(() => {
+        this.subscribe("project", projectId);
+    });
+    this.projectCursor = Projects.find({
+        _id: projectId
+    });
+    // convenience property for accessing the project data but always having the latest (reactive) data
+    Object.defineProperty(this, "entries", {
+        get: function() {
+            return this.projectCursor.fetch()[0].entries.sort((a, b) => {
+                a = global.parseDate(a.date);
+                b = global.parseDate(b.date);
+                if (a.isBefore(b)) {
+                    return -1;
+                }
+                if (a.isAfter(b)) {
+                    return 1;
+                }
+                return 0;
+            });
+        },
+        set: function() {
+            throw new Error("Can't set entries");
+        }
+    });
+    this.viewModes = this.data.viewModes;
+    this.aggregatedChart = null;
+    this.trendingChart = null;
+});
+
+Template.EntriesGraphs.onRendered(function() {
+    let viewModes = this.viewModes;
+    let viewMode;
+    let aggregatedData = [];
+    let trendingData = {};
+    let xs = {};
+    let i;
+
+    for (i = 0; i < viewModes.length; i++) {
+        viewMode = viewModes[i];
+        aggregatedData.push([AGGR_LABELS_BY_VIEW_MODE[viewMode]]);
+
+        // prepare data for trending data
+        if (viewMode !== "all") {
+            let label = TREND_LABELS_BY_VIEW_MODE[viewMode];
+            xs[label] = "x-" + label;
+            trendingData[viewMode] = {
+                x: [xs[label]],
+                y: [label]
+            };
+        }
+    }
+    // init charts with bare data
+    this.aggregatedChart = c3.generate($.extend(true, {}, GRAPH_CONFIG, {
+        bindto: this.find(".aggregatedChart"),
+        data: {
+            columns: aggregatedData,
+            type: "bar"
+        }
+    }));
+    this.trendingChart = c3.generate($.extend(true, {}, GRAPH_CONFIG, {
         bindto: this.find(".trendingChart"),
         data: {
             xs: xs,
@@ -177,11 +224,16 @@ Template.EntriesGraphs.onRendered(function() {
             }
         }
     }));
+    loadGraphData.call(this);
 });
 
 Template.EntriesGraphs.helpers({
     numberOfEntries: function() {
-        let num = Template.instance().entries.length;
+        let template = Template.instance();
+        let num = template.entries.length;
+        setTimeout(function() {
+            loadGraphData.call(template);
+        }, 80);
         if (num !== 1) {
             return num + " entries";
         }

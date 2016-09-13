@@ -1,5 +1,13 @@
 // GLOBAL FUNCTIONS
 
+global.log10 = function(datum) {
+    return datum !== 0 ? (Math.log(datum) / Math.LN10) : 0;
+};
+
+global.exp10 = function(datum) {
+    return Math.ceil(Math.pow(10, datum));
+};
+
 global.goHome = function(params) {
     if (!params) {
         location.href = "/";
