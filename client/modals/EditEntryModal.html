@@ -4,7 +4,8 @@
             {{> afFormGroup name=(concat "entries." this.entryIndex ".date")}}
             {{> afFormGroup name=(concat "entries." this.entryIndex ".duration")}}
             {{> afFormGroup name=(concat "entries." this.entryIndex ".note")}}
-            {{> afSubmitBtn}}
+            {{> afSubmitBtn buttonContent="Save"}}
+            {{> TemplateHooks onRenderedCallback="initDatetimepickerAndSubmit" container=(concat "#" this.id)}}
         {{/autoForm}}
     {{/Modal}}
 </template>

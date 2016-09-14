@@ -125,10 +125,43 @@ global.dateFormat = "DD.MM.YY";
 global.timeFormat = "HH:mm:ss";
 
 global.TemplateHooks = {
-    // initDatetimepickerAndSubmit in AddEntryModal
+    // used in AddEntryModal and EditEntryModal
+    initDatetimepickerAndSubmit: function(container) {
+        global.$find(".date", container).datetimepicker({
+            format: global.dateFormat
+        }).focus();
+        let durationElem = global.$find(".duration", container);
+        let seconds = parseInt(durationElem.val(), 10);
+        durationElem
+            .attr("type", "text")
+            .datetimepicker({
+                format: global.timeFormat,
+                // "stepping: 5" does not work
+                keyBinds: {
+                    up: function() {
+                        this.date(this.date().clone().add(5, "m"));
+                    },
+                    down: function() {
+                        this.date(this.date().clone().subtract(5, "m"));
+                    }
+                }
+            })
+            .data("DateTimePicker").date(
+                moment
+                    .duration(seconds, "seconds")
+                    .format(global.timeFormat, {trim: false})
+            );
+            // .val(moment.duration(durationElem.val(), "seconds").format(global.timeFormat));
+        global.$find("form", container).submit(function() {
+            // convert time format to seconds for database
+            let durationVal = durationElem.val();
+            let duration = global.parseTime(durationVal);
+            durationElem.val(duration.asSeconds());
+        });
+    }
 };
 
 global.temporaryCallbacks = {
     // set in Template.Project.events "click #clock-save"
-    AddEntryModalShown: function(modal) {}
+    AddEntryModalShown: function() {}
 };

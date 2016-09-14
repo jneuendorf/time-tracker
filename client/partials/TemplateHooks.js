@@ -7,5 +7,5 @@ Template.TemplateHooks.onRendered(function() {
         container = this.$("*").parent();
     }
     let funcName = this.$(".onRendered").val();
-    global.TemplateHooks[funcName].call(this, container);
+    global.TemplateHooks[funcName].call(this, container, this.data);
 });

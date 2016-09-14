@@ -4,19 +4,15 @@ Template.Entry.onCreated(function() {
         this.subscribe("project", projectId);
     });
     this.projectId = projectId;
-    this.project = Projects.find({_id: this.projectId});
+    this.project = Projects.find({_id: projectId});
 });
 
 Template.Entry.helpers({
     project: function() {
-        // let project = Projects.findOne({
-        //     _id: Template.instance().projectId
-        // });
-        // return project;
-        return Template.instance().project.fetch();
+        return Template.instance().project.fetch()[0];
     },
     dayOfWeek: function() {
-        return parseDate(Template.instance().data.date).format("dd");
+        return parseDate(Template.instance().data.date).format("ddd");
     }
 });
 
