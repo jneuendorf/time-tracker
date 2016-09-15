@@ -11,6 +11,7 @@
                             <span>{{name}}</span>
                         </label>
                     {{/each}}
+                    {{> IconButton icon="folder-close" label="Toggle aggregation" id="toggleAggregationByDay" buttonKind="default"}}
                     {{> IconButton icon="cloud-download" label="Export current" id="exportCsv" buttonKind="default"}}
                 </div>
             {{/if}}
@@ -29,14 +30,16 @@
     <!-- ENTRIES TABLE -->
     <div class="row">
         <div class="col-xs-8 col-xs-push-2">
-            {{#if entries "table - if"}}
+            {{#if entries}}
                 <table class="entries table table-striped table-hover">
                     <thead>
                         <tr>
                             <th class="date">Date</th>
                             <th class="duration">Duration</th>
                             <th class="note">Note</th>
-                            <th class="buttons"></th>
+                            {{#if (not isAggregated)}}
+                                <th class="buttons"></th>
+                            {{/if}}
                         </tr>
                     </thead>
                     <tbody>

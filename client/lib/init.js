@@ -66,6 +66,12 @@ global.parseTime = function(timeString) {
     return moment.duration(date.diff(moment("1970-01-01")));
 };
 
+global.formatTime = function(duration) {
+    return moment
+        .duration(duration, "seconds")
+        .format(global.timeFormat, {trim: false});
+};
+
 global.filterBy = (entries, kind, refDate) => {
     let refValue = moment(refDate)[kind]();
     // console.log(kind + "ly", refValue);

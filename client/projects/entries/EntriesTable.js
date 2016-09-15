@@ -17,6 +17,7 @@ Template.EntriesTable.onCreated(function() {
     });
     this.viewMode = new ReactiveVar("all");
     this.viewModeOffset = new ReactiveVar(0);
+    this.aggregateEntries = new ReactiveVar(false);
     this.earliestEntryDate = this.project.entries.reduce((prev, current) => {
         current = global.parseDate(current.date);
         if (current.isBefore(prev)) {
@@ -52,11 +53,11 @@ let csvStringifyArray = (array, delimiter) => {
         }
         return item;
     }).join(delimiter);
-}
+};
 
 let csvStringifyObject = (object, delimiter, excludeKeys) => {
     let array = [];
-    var keys = Object.keys(object).filter((key) => {
+    let keys = Object.keys(object).filter((key) => {
         return excludeKeys.indexOf(key) < 0;
     });
     for (let i = 0; i < keys.length; i++) {
@@ -79,7 +80,7 @@ let csvStringifyEntries = (entries, delimiter) => {
         }).map((key) => {
             return key[0].toUpperCase() + key.slice(1);
         }),
-        delimiter)
+        delimiter);
     return header + "\n" + entries.map((entry) => {
         return csvStringifyObject(entry, delimiter, excludeKeys);
     }).join("\n");
@@ -133,12 +134,30 @@ Template.EntriesTable.helpers({
         let viewMode = template.viewMode.get();
         let offset = template.viewModeOffset.get();
         let refDate = moment().add(offset, UNITS_BY_VIEW_MODE[viewMode]);
+        let entries = template.project.entries;
+        if (template.aggregateEntries.get() === true) {
+            let groupedEntries = groupBy(entries, function(entry) {
+                return global.parseDate(entry.date).unix();
+            });
+            let temp = [];
+            for (let unix in groupedEntries) {
+                temp.push({
+                    date: groupedEntries[unix][0].date,
+                    duration: groupedEntries[unix].reduce((prev, current) => {
+                        return prev + current.duration;
+                    }, 0),
+                    note: groupedEntries[unix].map((entry) => {
+                        return entry.note;
+                    }).join("; "),
+                    isAggregated: true
+                });
+            }
+            entries = temp;
+        }
         let filteredEntries = global.filterEntriesByViewMode(
-            template.project.entries.map((entry, index) => {
+            entries.map((entry, index) => {
                 entry.index = index;
-                entry.durationFormatted = moment
-                    .duration(entry.duration, "seconds")
-                    .format(global.timeFormat, {trim: false});
+                entry.durationFormatted = global.formatTime(entry.duration);
                 return entry;
             }),
             viewMode,
@@ -146,6 +165,9 @@ Template.EntriesTable.helpers({
         );
         template.filteredEntries = filteredEntries;
         return filteredEntries;
+    },
+    isAggregated: function() {
+        return Template.instance().aggregateEntries.get();
     },
     viewModes: function() {
         let currentViewMode = Template.instance().viewMode.get();
@@ -205,5 +227,10 @@ Template.EntriesTable.events({
             {type: "text/plain;charset=utf-8"}
         );
         saveAs(blob, filename);
+    },
+    "click #toggleAggregationByDay": function(event, template) {
+        let btn = template.$(event.currentTarget);
+        btn.children(".glyphicon").toggleClass("glyphicon-folder-open glyphicon-folder-close");
+        template.aggregateEntries.set(!template.aggregateEntries.get());
     }
 });
