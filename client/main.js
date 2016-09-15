@@ -49,3 +49,61 @@ Template.registerHelper("jQuery", function(str) {
 Template.registerHelper("nl2br", function(str) {
     return $("<p/>").html(str).text().replace(/\n/g, "<br>");
 });
+
+
+
+// HOOKS
+const changeSubmitBtnState = function(template, state) {
+    template.$("button[type='submit']").prop("disabled", state);
+};
+global.AUTOFORM_SUBMIT_CALLBACKS = {
+    beginSubmit: function() {
+        console.log("beginSubmit");
+        changeSubmitBtnState(this.template, true);
+    },
+    endSubmit: function() {
+        console.log("endSubmit");
+        changeSubmitBtnState(this.template, false);
+    },
+    // formToDoc: function(doc) {
+    //     console.log("formToDoc", doc);
+    //     doc.duration = global.parseTime(doc.duration).asSeconds();
+    //     return doc;
+    // },
+    // formToModifier: function(modifier) {
+    //     console.log("formToModifier", modifier);
+    //     return modifier;
+    // },
+    // before: {
+    //     update: function(doc) {
+    //         console.log("before", doc);
+    //         return doc;
+    //     }
+    // }
+};
+global.AUTOFORM_EDIT_ENTRY_CALLBACKS = $.extend({}, global.AUTOFORM_SUBMIT_CALLBACKS, {
+    formToModifier: function(modifier) {
+        let regex = /entries\.\d\.duration/;
+        for (let key in modifier.$set) {
+            if (regex.test(key)) {
+                modifier.$set[key] = global.parseTime(modifier.$set[key]).asSeconds();
+                break;
+            }
+        }
+        console.log("formToModifier", modifier);
+        return modifier;
+    }
+});
+
+AutoForm.hooks({
+    AddEntryForm: $.extend(
+        {
+            formToDoc: function(doc) {
+                console.log("formToDoc", doc);
+                doc.duration = global.parseTime(doc.duration).asSeconds();
+                return doc;
+            }
+        },
+        global.AUTOFORM_SUBMIT_CALLBACKS
+    )
+});

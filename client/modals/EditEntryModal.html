@@ -1,11 +1,18 @@
 <template name="EditEntryModal">
     {{#Modal id=this.id title="Edit entry"}}
-        {{#autoForm id=(concat "editEntry" this.entryIndex) type="update" collection="Projects" doc=this.doc setArrayItems=true}}
-            {{> afFormGroup name=(concat "entries." this.entryIndex ".date")}}
-            {{> afFormGroup name=(concat "entries." this.entryIndex ".duration")}}
-            {{> afFormGroup name=(concat "entries." this.entryIndex ".note")}}
-            {{> afSubmitBtn buttonContent="Save"}}
-            {{> TemplateHooks onRenderedCallback="initDatetimepickerAndSubmit" container=(concat "#" this.id)}}
+        {{#autoForm
+            id=(concat "editEntry" this.entryIndex)
+            type="update"
+            collection="Projects"
+            doc=this.doc
+            setArrayItems=true
+            validation="submit"}}
+                {{> afFormGroup name=(concat "entries." this.entryIndex ".date")}}
+                {{> afFormGroup name=(concat "entries." this.entryIndex ".duration")}}
+                {{> afFormGroup name=(concat "entries." this.entryIndex ".note")}}
+                {{> afSubmitBtn buttonContent="Save"}}
+                {{> TemplateHooks onRenderedCallback="initDatetimepickerAndSubmit" container=(concat "#" this.id)}}
+                {{> TemplateHooks onRenderedCallback="addAutoformHook" container=(concat "#" this.id) id=(concat "editEntry" this.entryIndex)}}
         {{/autoForm}}
     {{/Modal}}
 </template>

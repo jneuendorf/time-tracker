@@ -1,4 +1,4 @@
-Projects = new Mongo.Collection('projects');
+Projects = new Mongo.Collection("projects");
 
 // Projects.allow({
 //     insert: function(userId, doc) {
@@ -13,7 +13,7 @@ Entry = new SimpleSchema({
     createdAt: {
         type: Number,
         label: "Created At",
-        autoValue: function(entry) {
+        autoValue: function() {
             return Date.now();
         },
         autoform: {
@@ -25,6 +25,7 @@ Entry = new SimpleSchema({
         autoform: {
             afFieldInput: {
                 class: "date",
+                autocomplete: "off"
             }
         }
     },
@@ -32,7 +33,8 @@ Entry = new SimpleSchema({
         type: Number,
         autoform: {
             afFieldInput: {
-                class: "duration"
+                class: "duration",
+                autocomplete: "off"
             }
         }
     },

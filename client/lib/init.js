@@ -134,6 +134,11 @@ global.TemplateHooks = {
         let seconds = parseInt(durationElem.val(), 10);
         durationElem
             .attr("type", "text")
+            .val(
+                moment
+                    .duration(seconds, "seconds")
+                    .format(global.timeFormat, {trim: false})
+            )
             .datetimepicker({
                 format: global.timeFormat,
                 // "stepping: 5" does not work
@@ -146,18 +151,16 @@ global.TemplateHooks = {
                     }
                 }
             })
-            .data("DateTimePicker").date(
-                moment
-                    .duration(seconds, "seconds")
-                    .format(global.timeFormat, {trim: false})
-            );
-            // .val(moment.duration(durationElem.val(), "seconds").format(global.timeFormat));
-        global.$find("form", container).submit(function() {
-            // convert time format to seconds for database
-            let durationVal = durationElem.val();
-            let duration = global.parseTime(durationVal);
-            durationElem.val(duration.asSeconds());
-        });
+            // .data("DateTimePicker").date(
+            //     moment
+            //         .duration(seconds, "seconds")
+            //         .format(global.timeFormat, {trim: false})
+            // );
+            ;
+    },
+    // used in EditEntryModal
+    addAutoformHook: function(container, data) {
+        AutoForm.addHooks(data.id, AUTOFORM_EDIT_ENTRY_CALLBACKS, true);
     }
 };
 
