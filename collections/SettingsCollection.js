@@ -1,4 +1,4 @@
-Settings = new Mongo.Collection('settings');
+Settings = new Mongo.Collection("settings");
 
 SettingsSchema = new SimpleSchema({
     fetchProjectsUrl: {
@@ -8,6 +8,17 @@ SettingsSchema = new SimpleSchema({
             afFieldInput: {
                 placeholder: "http://www.dev-server.com/projects.json"
             }
+        }
+    },
+    fetch_username: {
+        type: String,
+        label: "User name (fetch)",
+    },
+    fetch_password: {
+        type: String,
+        label: "Password (fetch)",
+        autoform: {
+            type: "password"
         }
     },
     updateProjectUrl: {
@@ -22,22 +33,22 @@ SettingsSchema = new SimpleSchema({
             }
         }
     },
-    username: {
+    update_username: {
         type: String,
-        label: "User name",
+        label: "User name (update)",
     },
-    password: {
+    update_password: {
         type: String,
-        label: "Password",
+        label: "Password (update)",
         autoform: {
             type: "password"
         }
     },
-    dateFormat: {
-        type: String,
-        label: "Date format (momentJS notation)",
-        defaultValue: "DD.MM.YY"
-    },
+    // dateFormat: {
+    //     type: String,
+    //     label: "Date format (momentJS notation)",
+    //     defaultValue: "DD.MM.YY"
+    // },
     csvDelimiter: {
         type: String,
         label: "CSV delimiter",
