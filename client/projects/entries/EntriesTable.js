@@ -99,7 +99,6 @@ let slickArrow = function(kind) {
 };
 
 // TODO: make this better so it actually happens only when all intervals have been rendered
-// TODO: maybe use TemplateHooks Template
 let reslick = function(template, timeIntervals) {
     if (!timeIntervals || timeIntervals.length === 0) {
         timeIntervals = $(".timeIntervals");

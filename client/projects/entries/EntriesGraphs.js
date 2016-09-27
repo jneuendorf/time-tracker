@@ -29,21 +29,19 @@ const addDurations = function(entries) {
 
 const GRAPH_CONFIG = {
     data: {
-        // TODO: this does not work
-        // color: {
-        //     // aggregated chart
-        //     all: "rgb(31, 119, 180)",
-        //     today: "rgb(255, 127, 14)",
-        //     "this week": "rgb(44, 160, 44)",
-        //     "this month": "rgb(214, 39, 40)",
-        //     // "this year": "rgb(148, 103, 189)",
-        //     "this year": "black",
-        //     // trending chart
-        //     daily: "rgb(255, 127, 14)",
-        //     weekly: "rgb(44, 160, 44)",
-        //     monthly: "rgb(214, 39, 40)",
-        //     annually: "rgb(148, 103, 189)",
-        // }
+        colors: {
+            // aggregated chart
+            "all": "rgb(31, 119, 180)",
+            "today": "rgb(255, 127, 14)",
+            "this week": "rgb(44, 160, 44)",
+            "this month": "rgb(214, 39, 40)",
+            "this year": "rgb(148, 103, 189)",
+            // trending chart
+            "daily": "rgb(255, 127, 14)",
+            "weekly": "rgb(44, 160, 44)",
+            "monthly": "rgb(214, 39, 40)",
+            "annually": "rgb(148, 103, 189)",
+        }
     },
     axis: {
         x: {
@@ -100,6 +98,7 @@ const loadGraphData = function() {
             };
         }
     }
+    console.log(aggregatedData);
     this.aggregatedChart.load({
         columns: aggregatedData
     });
@@ -132,6 +131,7 @@ const loadGraphData = function() {
             for (let viewMode in trendingData) {
                 result.push(trendingData[viewMode].x, trendingData[viewMode].y);
             }
+            console.log(result);
             return result;
         }())
     });
