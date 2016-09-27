@@ -46,9 +46,9 @@ const MOMENT_FORMATS_BY_VIEW_MODE = {
 let csvStringifyArray = (array, delimiter) => {
     return array.map((item) => {
         if (typeof item === "string") {
-            item = item.replace('"', '""');
+            item = item.replace("\"", "\"\"");
             if (item.indexOf(delimiter) >= 0) {
-                item = '"' + item + '"';
+                item = "\"" + item + "\"";
             }
         }
         return item;
